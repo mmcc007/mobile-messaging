@@ -95,10 +95,16 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 		   
-	debug 'com.google.apps.easyconnect'
+//	debug 'com.google.apps.easyconnect',
+//		  'org.springframework.security',
+//		  'org.springframework.security.web.authentication'
 }
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.orbsoft.roadz.domain.UserSec'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.orbsoft.roadz.domain.UserSecRoleSec'
 grails.plugins.springsecurity.authority.className = 'com.orbsoft.roadz.domain.RoleSec'
+//grails.plugins.springsecurity.providerNames = [
+//	'preAuthenticatedAuthenticationProvider',
+//	'anonymousAuthenticationProvider',
+//	'rememberMeAuthenticationProvider']
