@@ -7,7 +7,7 @@ public final class Constants {
 	  /**
 	   * Default URL for home page.
 	   */
-	  public static final String HOME_PAGE_URL = "home.jsp";
+	  public static final String HOME_PAGE_URL = "";
 	
 	  /**
 	   * The URL for account page.
