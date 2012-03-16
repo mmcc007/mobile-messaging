@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 	<head>
+<%--<geolocation:resourcesJquery/>--%>
 		<meta name="layout" content="main"/>
 		<title>Welcome to Grails</title>
 		<style type="text/css" media="screen">
@@ -79,19 +80,22 @@
 				}
 			}
 		</style>
-		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<%--		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>--%>
+ 		 <script type="text/javascript" src="/Roadz/static/js/json2.js" ></script>
+        <script src="/Roadz/static/plugins/jquery-1.7.1/js/jquery/jquery-1.7.1.min.js" type="text/javascript" ></script>
+<%--<geolocation:resourcesJquery/>--%>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/googleapis/0.0.4/googleapis.min.js"></script>
 <script type="text/javascript" src="//ajax.googleapis.com/jsapi"></script>
 <script type="text/javascript">
-  google.load("identitytoolkit", "1", {packages: ["ac"], language:"en"});
+  google.load("identitytoolkit", "1", {packages: ["mobile_ac"], language:"en"});
 </script>
 <script type="text/javascript">
   $(function() {
     window.google.identitytoolkit.setConfig({
         developerKey: "AIzaSyBxRA1SwApaq3WQUreST9m_kJfVMTO3sPw",
         companyName: "Orbsoft",
-        callbackUrl: "http://localhost:9000/Roadz/gitkit",
+        callbackUrl: "http://localhost:9000/Roadz/gitkit?rp_fullPageRedirect=true",
         realm: "",
         userStatusUrl: "/userstatus",
         loginUrl: "/login",
@@ -115,11 +119,15 @@
     </g:if>
     });
 </script>
-<%--developerKey: "AIzaSyCPgZBX3_gTNaU9hIyPU_6iKkpqcbLUjEk",--%>
-
+        
 	</head>
 	<body>
-	<div id="navbar"></div>
+	<sec:ifNotLoggedIn>
+		<div id="navbar"></div>
+    </sec:ifNotLoggedIn>
+	<sec:ifLoggedIn>
+		<div>Welcome back <sec:username/>!</div>
+    </sec:ifLoggedIn>
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div id="status" role="complementary">
 			<h1>Application Status</h1>
@@ -157,5 +165,6 @@
 				</ul>
 			</div>
 		</div>
+	<geolocation:locateMe/>
 	</body>
 </html>
