@@ -21,7 +21,8 @@ grails.project.dependency.resolution = {
         grailsHome()
         grailsCentral()
         mavenCentral()
-
+//		mavenRepo "http://repo2.maven.org/maven2"
+		
         // uncomment these to enable remote dependency resolution from public Maven repositories
         //mavenCentral()
         mavenLocal()
@@ -30,25 +31,33 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
-    dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
+	dependencies {
+		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
-        // runtime 'mysql:mysql-connector-java:5.1.16'
-//		 compile 'org.json:json:20090211'
-		 compile 'com.google.gitkit:client-library:1.0'
-		 
-    }
+		// runtime 'mysql:mysql-connector-java:5.1.16'
+		//		 compile 'org.json:json:20090211'
+		compile 'com.google.gitkit:client-library:1.0'
+
+//		def cometVersion = '2.4.0'
+//		compile(group: 'org.cometd.java', name: 'cometd-java-annotations', version: cometVersion) { excludes 'servlet-api' }
+//		compile(group: 'org.cometd.java', name: 'cometd-java-server', version: cometVersion) { excludes 'servlet-api' }
+//		compile group: 'org.cometd.java', name: 'bayeux-api', version: cometVersion
+
+	}
 
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
-        runtime ":resources:1.1.6"
+//        runtime ":resources:1.1.6"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
 
-        build ":tomcat:$grailsVersion"
+//        build ":tomcat:$grailsVersion"
+//        build ":tomcat:$grailsVersion"
+        build ":jetty7:0.3.2"
     }
 }
+//grails.plugin.location.cometdPlugin = "C:/Users/Maurice/Documents/workspace/cometdPlugin"
