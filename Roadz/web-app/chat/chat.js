@@ -66,6 +66,7 @@ var room = {
 
     join: function(name)
     {
+    	
         room._disconnecting = false;
 
         if (name == null || name.length == 0)
@@ -74,7 +75,9 @@ var room = {
             return;
         }
 
-        dojox.cometd.ackEnabled = dojo.byId("ackEnabled").checked;
+    	geolocate.startGeolocation();
+
+    	dojox.cometd.ackEnabled = dojo.query("#ackEnabled").attr("checked");
 
         dojox.cometd.websocketEnabled = true;
         var cometdURL = location.protocol + "//" + location.host + config.contextPath + "/cometd";
@@ -112,8 +115,11 @@ var room = {
 
     leave: function()
     {
+    	geolocate.stopGeolocation();
         dojox.cometd.batch(function()
         {
+        	removeMarker(room._username);
+        	zoomOut();
             dojox.cometd.publish("/chat/demo", {
                 user: room._username,
                 membership: 'leave',
@@ -163,6 +169,21 @@ var room = {
     receive: function(message)
     {
         var fromUser = message.data.user;
+    	// check for position message
+    	if (message.data.latitude) {
+//    		geolocate.geoReceive(message);
+    		moveMarker(fromUser, message.data.latitude, message.data.longitude);
+    		return;
+    	}
+//    	if (message.data.chat == "Connection to Server Closed") {
+//        	removeAllMarkers();
+//    	}
+            
+    	// check for member leaving message
+//    	if (message.data.leave) {
+        if (message.data.membership == "leave") {
+    		removeMarker(fromUser);
+    	}
         var membership = message.data.join || message.data.leave;
         var text = message.data.chat;
 
@@ -198,8 +219,22 @@ var room = {
     {
         var members = dojo.byId('members');
         var list = "";
-        for (var i in message.data)
-            list += message.data[i] + "<br/>";
+//        removeAllMarkers();
+//        for (var i in message.data) {
+//        	var user = message.data[i];
+//            list += user.username + "<br/>";
+//            var username = user.username;
+//            var latitude = user.latitude;
+//            var longitude = user.longitude;
+//			moveMarker(
+//					username,
+//					latitude,
+//					longitude);
+//      	
+//        }
+      for (var i in message.data) {
+    	  list += message.data[i] + "<br/>";
+      }
         members.innerHTML = list;
     },
 
@@ -229,7 +264,9 @@ var room = {
         });
         dojox.cometd.publish('/service/members', {
             user: room._username,
-            room: '/chat/demo'
+            room: '/chat/demo',
+//    		latitude : myPosition.coords.latitude,
+//    		longitude : myPosition.coords.longitude
         });
     },
 
