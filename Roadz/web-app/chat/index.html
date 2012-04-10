@@ -3,9 +3,15 @@
 
 <head>
     <title>Cometd chat</title>
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.2/dojox/mobile/themes/iphone/base.css">
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.2/dojox/mobile/themes/iphone/TabBar.css">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <!--     <script src="//ajax.googleapis.com/ajax/libs/dojo/1.7.2/dojo/dojo.js.uncompressed.js"></script> -->
-    <script type="text/javascript" src="../dojo/dojo.js"></script>
+<!-- 	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.2/dojo/dojo.js" djConfig="parseOnLoad: true, async: false, mblAlwaysHideAddressBar: true"></script> -->
+    <script type="text/javascript" src="../dojo-1.7.1/dojo/dojo.js" djConfig="parseOnLoad: true, async: false, mblAlwaysHideAddressBar: true"></script>
+	<link href="genericdrag.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="genericdrag.js"></script>
+	<script type="text/javascript" src="src.js"></script>
     <script type="text/javascript" src="chat.js"></script>
     <link rel="stylesheet" type="text/css" href="chat.css">
     <script type="text/javascript" src="geolocate.js"></script>
@@ -58,9 +64,9 @@
 </head>
 
 <body>
-
-<h1>Cometd Chat Example</h1>
-<h6> <a href="..">Main Demo index</a> </h6>
+	<h1 dojoType="dojox.mobile.Heading" fixed="top" label="Application Header Bar" back="Back" moveTo="back">
+	    <div dojoType="dojox.mobile.ToolBarButton" label="Edit" class="mblColorBlue" style="width:25px;float:right;"/>
+	</h1>
 
 <div id="chatroom">
 	<div id="map_canvas" style="width:50%; height:240px;float:left;"></div>
@@ -106,6 +112,13 @@
 </div>
 <br />
 <div style="padding: 0.25em;">Tip: Use username[,username2]::text to send private messages</div>
+<div id="boxB" class="dragbox" style="left:400px;top:150px;">
+  <div class="dragbar" style="width:12em;"
+       onmousedown="dragStart(event, 'boxB')">Drag Box B</div>
+  <div class="dragcontent" style="width:12em;">This is Box B, drag it using the bar above.
+<!--   <input dojoType="dojox.mobile.TextBox" placeHolder="send message" /> -->
+  </div>
+</div>
 
 </body>
 
