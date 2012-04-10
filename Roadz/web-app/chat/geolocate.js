@@ -35,7 +35,7 @@ var geolocate = {
 //	}
 };
 
-var map;
+var map = null;
 var mapInitState=true;
 var myPosition;
 var myClientId;
