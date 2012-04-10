@@ -247,7 +247,7 @@ var room = {
             dojox.cometd.publish('/chat/demo', {
                 user: room._username,
                 membership: 'join',
-                chat: room._username + ' has joined'
+                chat: room._username + ' has joined circle'
             });
         });
     },
