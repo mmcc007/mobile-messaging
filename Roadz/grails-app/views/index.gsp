@@ -94,53 +94,26 @@
 					class="mblColorBlue" style="width: 25px; float: right"></div>
 			</h1>
 			<div id="map_canvas"></div>
-			<div id="boxB" class="dragbox" style="left: 400px; top: 50px;">
-				<div class="dragbar" style="width: 12em;"
-					onmousedown="dragStart(event, 'boxB')">Chat</div>
-				<div class="dragcontent" style="width: 12em;">
-<div id="chatroom">
-<!-- 	<div id="map_canvas" style="width:50%; height:240px;float:left;"></div> -->
-    <div id="chat"></div>
-    <div id="members"></div>
-    <div id="input">
-        <div id="join">
-            <table>
-                <tbody>
-<!--                 <tr> -->
-<!--                     <td> -->
-<!--                         <input id="ackEnabled" type="checkbox" /> -->
-<!--                     </td> -->
-<!--                     <td> -->
-<!--                         <label for="ackEnabled">Enable ack extension</label> -->
-<!--                     </td> -->
-<!--                     <td>&nbsp;</td> -->
-<!--                     <td>&nbsp;</td> -->
-<!--                 </tr> -->
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                        Enter Chat Nickname
-                    </td>
-                    <td>
-                        <input id="username" type="text" />
-                    </td>
-                    <td>
-                        <button id="joinButton" class="button">Join</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="joined">
-            <input id="phrase" type="text" />
-            <button id="sendButton" class="button">Send</button>
-<!--             <button id="leaveButton" class="button">Leave</button> -->
-        </div>
-    </div>
-</div>
-<!-- 					<input data-dojo-type="dojox.mobile.TextBox" placeHolder="send message" /> -->
+	<div id="boxB" class="dragbox dragcontent"
+		style="left: 100px; top: 50px;">
+		<div class="dragcontent" style="width: 14em;"
+			ontouchstart="dragStart(event, 'boxB')"
+			onmousedown="dragStart(event, 'boxB')">
+			dragcontent
+			<div id="chatroom">
+				<!-- 	<div id="map_canvas" style="width:50%; height:240px;float:left;"></div> -->
+				<div id="chat"></div>
+				<div id="members"></div>
+				<div id="input">
+					<div id="joined">
+						<input id="phrase" type="text" />
+						<button id="sendButton" class="button">Send</button>
+						<!--             <button id="leaveButton" class="button">Leave</button> -->
+					</div>
 				</div>
 			</div>
+		</div>
+	</div>
 
 		</div>
 
