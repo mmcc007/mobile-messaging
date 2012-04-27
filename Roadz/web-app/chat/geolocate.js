@@ -97,7 +97,7 @@ function log(msg) {
 function moveMarker(id, latitude, longitude) {
 	log('moveMarker : id: ' + id + ': lat: ' + latitude + ' : long: ' + longitude);
 	// if no map do nothing
-	if (map) {
+//	if (map) {
 		var coords = new google.maps.LatLng(latitude, longitude);
 
 		// find the marker
@@ -115,23 +115,23 @@ function moveMarker(id, latitude, longitude) {
 		marker.position = coords;
 //		marker.mapMarker.position = coords;
 		marker.lastMoved = new Date();
-	}
+//	}
 }
 
 function removeMarker(id) {
 	log('removeMarker : id: ' + id);
 	// if no map do nothing
-	if (map) {
+//	if (map) {
 		var marker = markers[id];
 		marker.mapMarker.setMap(null);
 		delete markers[id];
-	}
+//	}
 }
 
 function removeAllMarkers() {
 	log('removeMarkers()');
 	// if no map do nothing
-	if (map) {
+//	if (map) {
 		for ( var i in markers) {
 			var marker = markers[i];
 			if (typeof marker == "object") {
@@ -143,14 +143,14 @@ function removeAllMarkers() {
 		}
 		//			markers = null;
 		//			markers = [];
-	}
+//	}
 }
 
 function cleanupMarkers(age) {
 
 	log('cleanMarkers');
 	// if no map do nothing
-	if (map) {
+//	if (map) {
 		for (marker in markers) {
 			var lastHeartbeat = marker.heartbeatDate;
 			if (lastHeartbeat + age > new Date()) {
@@ -159,13 +159,13 @@ function cleanupMarkers(age) {
 				marker.marker.setMap(null);
 			}
 		}
-	}
+//	}
 }
 
 //	asyncWhenTrueDo("dojox.cometd.getClientId() && myPosition", "heartbeat()");
 
 function initMap(position) {
-	if (!map) {
+//	if (!map) {
 		// Define the coordinates as a Google Maps LatLng Object
 		var latLng = undefined;
 		if (position)
@@ -185,7 +185,7 @@ function initMap(position) {
 		// Create the map, and place it in the map_canvas div
 		map = new google.maps.Map(document.getElementById("map_canvas"),
 				mapOptions);
-	}
+//	}
 
 }
 
@@ -195,7 +195,7 @@ function setPosition(position) {
 //	initMap(position);
 
 	// set map display if in initial state
-	if (mapInitState) {
+	if (mapInitState && map) {
 		map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 		map.setZoom(14);
 		mapInitState = false;
