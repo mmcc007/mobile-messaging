@@ -1,0 +1,10 @@
+dojo
+dojold
+mobiletest
+targetold
+*.class
+*~
+*.bak
+target-eclipse
+plugins
+

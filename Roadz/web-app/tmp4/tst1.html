@@ -1,0 +1,18 @@
+<html>
+<head>
+<link rel="stylesheet" src="touchscroll.css">
+<!-- … -->
+</head>
+<body>
+	<div id="scroller">
+	sdfadsfsdf
+		<!-- contents go here -->
+	</div>
+	<!-- <script src="css-beziers.js"></script> -->
+	<script src="touchscroll.min.js"></script>
+	<script>
+// 		var scroller = new TouchScroll(document.querySelector("#scroller"));
+		var scroller = new TouchScroll("#scroller", {elastic: true})
+	</script>
+</body>
+</html>

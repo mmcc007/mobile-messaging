@@ -1,0 +1,9 @@
+require([
+	"dojox/mobile/parser",
+	"dojox/mobile",
+	"dojox/mobile/ScrollableView",
+	"dojox/mobile/View",
+	"dojox/mobile/TabBar",
+	"dojox/mobile/TextBox",
+	"dojox/mobile/compat"
+]);

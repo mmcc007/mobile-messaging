@@ -1,0 +1,21 @@
+.dragbox {
+  opacity:0.7;
+  background-color: #C0C0C0;
+/*   border: 1px solid #000000; */
+  color: #000000;
+  padding: 0px;
+  position: absolute;
+}
+
+.dragbar {
+ 	font-size:80%;
+  background-color: #606060;
+  color: #ffffff;
+  cursor: move;
+  font-weight: bold;
+/*   padding: 1px 0.5em 1px 0.5em; */
+}
+
+.dragcontent {
+  padding: 0.25em;
+}
