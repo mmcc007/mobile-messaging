@@ -13,10 +13,10 @@ var room = {
 
     _init: function()
     {
-        dojo.removeClass("join", "hidden");
-        dojo.addClass("joined", "hidden");
-        dojo.byId('username').focus();
-
+//        dojo.removeClass("join", "hidden");
+//        dojo.addClass("joined", "hidden");
+//        dojo.byId('username').focus();
+//
         dojo.query("#username").attr({
             "autocomplete": "off"
         }).onkeyup(function(e)
@@ -55,7 +55,7 @@ var room = {
         // Restore the state, if present
         if (state)
         {
-            dojo.byId('username').value=state.username;
+//            dojo.byId('username').value=state.username;
             setTimeout(function()
             {
                 // This will perform the handshake
@@ -88,9 +88,9 @@ var room = {
 
         room._username = name;
 
-        dojo.addClass("join", "hidden");
-        dojo.removeClass("joined", "hidden");
-        dojo.byId("phrase").focus();
+//        dojo.addClass("join", "hidden");
+//        dojo.removeClass("joined", "hidden");
+//        dojo.byId("phrase").focus();
     },
 
     _unsubscribe: function()
@@ -197,22 +197,25 @@ var room = {
             fromUser += ":";
         }
 
-        var chat = dojo.byId('chat');
+        var chat = dojo.byId('myList');
         if (membership)
         {
-            chat.innerHTML += "<span class=\"membership\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">" + text + "</span></span><br/>";
+            chat.innerHTML += "<li><span class=\"membership\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">" + text + "</span></span></li>";
             room._lastUser = null;
         }
         else if (message.data.scope == "private")
         {
-            chat.innerHTML += "<span class=\"private\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">[private]&nbsp;" + text + "</span></span><br/>";
+            chat.innerHTML += "<li><span class=\"private\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">[private]&nbsp;" + text + "</span></span></li>";
         }
         else
         {
-            chat.innerHTML += "<span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">" + text + "</span><br/>";
+            chat.innerHTML += "<li><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">" + text + "</span></li>";
         }
 
-        chat.scrollTop = chat.scrollHeight - chat.clientHeight;
+        //chat.scrollTop = chat.scrollHeight - chat.clientHeight;
+	myScroll.refresh();
+	//myScroll.scrollToElement('li:nth-child(6)', 100);
+	myScroll.scrollToElement('li:last-child');
     },
 
     members: function(message)
