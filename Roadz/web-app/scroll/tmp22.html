@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/strict.dtd">
+<!--************************************************************************-->
+<!--* Generic Drag Demo                                                    *-->
+<!--*                                                                      *-->
+<!--* Copyright 2001 by Mike Hall                                          *-->
+<!--* Please see http://www.brainjar.com for terms of use.                 *-->
+<!--************************************************************************-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<title>BrainJar.com: Generic Drag Demo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="drag-demo2_files/default.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../chat/genericdrag.js"></script>
+<style type="text/css">
+
+.box {
+  background-color: #ffff00;
+  border: 1px solid #000000;
+  color: #000000;
+  padding: 0px;
+  position: absolute;
+}
+
+.bar {
+  background-color: #008080;
+  color: #ffffff;
+  cursor: move;
+  font-weight: bold;
+  padding: 2px 1em 2px 1em;
+}
+
+.content {
+  padding: 1em;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Normal page content. -->
+
+<div id="boxB" class="box" style="left: 612px; top: 133px; z-index: 5;">
+  <div class="bar" style="width:12em;" onmousedown="dragStart(event, 'boxB')">Drag Box B</div>
+  <div class="content" style="width:12em;">This is Box B, drag it using the bar above.</div>
+</div>
+
+</body></html>

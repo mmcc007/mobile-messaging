@@ -1,0 +1,117 @@
+/* iOS styles */
+
+/* vertically center the image */
+.mblToolBarButton.friendsviewRefresh {
+	float: right;
+	width: 29px;
+	height: 29px;
+}
+.friendsviewRefresh img	{
+	margin-top: 6px;
+}
+
+/* friendsview pane */
+.mblScrollableViewContainer {
+	padding-bottom: 40px !important;
+}
+
+.friendsviewList {
+	
+}
+.friendsviewHidden {
+	display: none;
+}
+
+.friendsviewList > li, .friendsviewList > div {
+	min-height: 55px;
+	padding-top: 8px;
+}
+
+.mblListItem.friendsviewListItem { /* special formatting to allow 2 lines of content */
+	line-height: 18px;
+	height: auto;
+}
+
+/* user's avatar */
+.friendsviewAvatar {
+	float: left;
+}
+/* content wrapper for tweets */
+.friendsviewContent {
+	padding-left: 60px;
+}
+
+/* username formatting */
+.friendsviewUser {
+	font-size: 80%;
+}
+
+/* actual tweet text formatting */
+.friendsviewText {
+	font-size: 70%;
+	font-weight: normal;
+	padding-right: 50px;
+	padding-bottom: 10px;
+}
+
+.android .friendsviewText {
+	font-size: 50%;
+}
+
+
+/* tweet time */
+.friendsviewTime {
+	float: right;
+	color: #777;
+	font-size: 65%;
+	font-weight: normal;
+	padding-right: 10px;
+}
+
+/* clears floats at the end of the list item */
+.friendsviewClear {
+	clear: both;
+}
+
+.friendsviewSwitch {
+	right: 10px;
+	top: 10px;
+	float: right;
+}
+
+.friendsviewHidden {
+	display: none;
+}
+
+.mblTabBar.friendsviewTabBar {
+	margin-top: -49px !important;
+}
+
+
+/* Android styles */
+
+.android .friendsviewRefresh img {
+    margin-top: 3px;
+}
+
+.android .mblRoundRectList {
+    background-color: #000;
+    border: none;
+}
+
+.android .friendsviewTime {
+    color: #fff;
+}
+
+.android .mblTabBarButtonTextBox {
+    color: #fff;
+}
+
+.android .mblTabBar .mblTabButtonSelected {
+    background-color: transparent;
+    border-radius: 0;
+}
+
+.android .mblColorDefaultSet {
+    background: #ffc700;
+} 

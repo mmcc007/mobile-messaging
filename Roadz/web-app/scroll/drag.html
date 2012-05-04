@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link href="drag-demo2_files/default.css" rel="stylesheet" type="text/css">
+	<link href="../../chat/genericdrag.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../chat/genericdrag.js"></script>
+<!--     <script type="text/javascript" src="../dojo-1.7.1/dojo/dojo.js" djConfig="parseOnLoad: true, async: false, mblAlwaysHideAddressBar: true"></script> -->
+
+</head>
+<body>
+	<div id="boxB" class="dragbox " style="left: 100px; top: 50px;">
+		<div class="dragcontent" style="width: 14em;"
+			ontouchstart="dragStart(event, 'boxB')"
+			onmousedown="dragStart(event, 'boxB')">
+			dragcontent
+			<div id="chatroom">
+				chatroom
+				<div id="chat"></div>
+				chat
+				<div id="members"></div>
+				members
+				<div id="input">
+					<div id="join"></div>
+					join
+				</div>
+			</div>
+		</div>
+					<div id="joined">
+						joined <input id="phrase" type="text" />
+						<button id="sendButton" class="button">Send</button>
+						<button id="leaveButton" class="button">Leave</button>
+					</div>
+	</div>
+</body>
+</html>

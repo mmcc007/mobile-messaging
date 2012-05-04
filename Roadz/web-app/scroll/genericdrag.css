@@ -1,0 +1,20 @@
+.box {
+  background-color: #ffff00;
+  border: 1px solid #000000;
+  color: #000000;
+  padding: 0px;
+  position: absolute;
+}
+
+.bar {
+  background-color: #008080;
+  color: #ffffff;
+  cursor: move;
+  font-weight: bold;
+  padding: 2px 1em 2px 1em;
+}
+
+.content {
+//  padding: 1em;
+}
+
