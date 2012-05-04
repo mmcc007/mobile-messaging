@@ -10,50 +10,70 @@ import com.google.apps.easyconnect.easyrp.client.basic.session.SessionManager;
 import com.orbsoft.roadz.domain.RoleSec
 import com.orbsoft.roadz.domain.UserSecRoleSec
 import com.orbsoft.roadz.domain.User
+import com.orbsoft.roadz.domain.Friendship
 import com.orbsoft.roadz.gitkit.Constants
+import grails.util.Environment
 
 class BootStrap {
 	def springSecurityService
 	def accountService
 	
     def init = { servletContext ->
-		
-        def samples = [
-            'maurice' : [ fullName: 'Maurice', email: "mmcc@orbsoft.com" ],
-            'chuck_norris' : [ fullName: 'Chuck Norris', email: "chuck@example.org" ],
-            'glen' : [ fullName: 'Glen Smith', email: "glen@example.org" ],
-            'peter' : [ fullName: 'Peter Ledbrook', email: "peter@somewhere.net" ],
-            'sven' : [ fullName: 'Sven Haiges', email: "sven@example.org" ],
-            'burt' : [fullName : 'Burt Beckwith', email: "burt@somewhere.net" ] ]
-		
-		def userRole = getOrCreateRole('ROLE_USER')
-		def adminRole = getOrCreateRole('ROLE_ADMIN')
+		if (Environment.isDevelopmentMode()) {
 
-		def users = User.list() ?: []
-		if (!users) {
-            // Start with the admin user.
-            def adminUser = new User(
-                    username: "admin",
-					password: 'admin',
-                    enabled: true).save()
-            UserSecRoleSec.create adminUser, adminRole
-			
-			// Now the normal users.
-			samples.each { username, profileAttrs ->
-//				println "${username} == ${profileAttrs}"
-				def user = new User(
-						username: username,
-						password: "password",
-						enabled: true).save()
-				def rel = UserSecRoleSec.create(user, userRole)
-				if (rel.hasErrors()) println "Failed to assign user role to ${user.username}: ${rel.errors}"
-				users << user
+		        def samples = [
+		            'maurice' : [ fullName: 'Maurice', email: "mmcc@orbsoft.com" ],
+		            'chuck_norris' : [ fullName: 'Chuck Norris', email: "chuck@example.org" ],
+		            'glen' : [ fullName: 'Glen Smith', email: "glen@example.org" ],
+		            'peter' : [ fullName: 'Peter Ledbrook', email: "peter@somewhere.net" ],
+		            'sven' : [ fullName: 'Sven Haiges', email: "sven@example.org" ],
+		            'burt' : [fullName : 'Burt Beckwith', email: "burt@somewhere.net" ] ]
+				
+				def userRole = getOrCreateRole('ROLE_USER')
+				def adminRole = getOrCreateRole('ROLE_ADMIN')
 
+				def users = User.list() ?: []
+				if (!users) {
+		            // Start with the admin user.
+		            def adminUser = new User(
+		                    username: "admin",
+							password: 'admin',
+		                    enabled: true).save()
+		            UserSecRoleSec.create adminUser, adminRole
+					
+					// Now the normal users.
+					samples.each { username, profileAttrs ->
+						println "${username} == ${profileAttrs}"
+						def user = new User(
+								username: username,
+								password: "password",
+								enabled: true).save()
+						def rel = UserSecRoleSec.create(user, userRole)
+						if (rel.hasErrors()) println "Failed to assign user role to ${user.username}: ${rel.errors}"
+						users << user
+
+					}
+					def maurice = User.findByUsername("maurice")
+					println "maurice == " + maurice.username
+					def glen = User.findByUsername("glen")
+					def chuck = User.findByUsername("chuck_norris")
+					println "glen == " + glen.username
+
+//					def friendship = new Friendship(status: "glen")
+//					maurice.addToFriendship(new Friendship(status: "glen")).save()
+					maurice.addToFriendship(new Friendship(friend: glen, status: "sss")).save()
+					maurice.addToFriendship(new Friendship(friend: chuck, status: "sss")).save()
+//					friendship.save()
+//					def friendship = new Friendship()
+//					friendship.user = maurice
+//					friendship.friend = glen
+//					friendship.save()
+					println "friendship saved"
 			}
-			initEasyRpContext()
-		}
-
+	    }
+		initEasyRpContext()
     }
+
     def destroy = {
     }
 	

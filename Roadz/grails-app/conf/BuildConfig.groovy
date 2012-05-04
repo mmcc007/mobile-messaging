@@ -37,6 +37,8 @@ grails.project.dependency.resolution = {
 		// runtime 'mysql:mysql-connector-java:5.1.16'
 		//		 compile 'org.json:json:20090211'
 		compile 'com.google.gitkit:client-library:1.0'
+        runtime "org.scribe:scribe:1.2.1"
+        build "org.scribe:scribe:1.2.1"
 
 //		def cometVersion = '2.4.0'
 //		compile(group: 'org.cometd.java', name: 'cometd-java-annotations', version: cometVersion) { excludes 'servlet-api' }
@@ -48,6 +50,12 @@ grails.project.dependency.resolution = {
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
+ 
+	//compile ":rest:0.7"
+	compile ":rest:0.6.1"
+	compile ":mail:1.0"
+//	compile ":inviter:0.3"
+
 //        runtime ":resources:1.1.6"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
@@ -57,7 +65,7 @@ grails.project.dependency.resolution = {
 
 //        build ":tomcat:$grailsVersion"
 //        build ":tomcat:$grailsVersion"
-        build ":jetty7:0.3.2"
+       build ":jetty7:0.3.2"
     }
 }
 //grails.plugin.location.cometdPlugin = "C:/Users/Maurice/Documents/workspace/cometdPlugin"

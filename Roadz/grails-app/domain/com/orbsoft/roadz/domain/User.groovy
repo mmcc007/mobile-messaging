@@ -12,7 +12,16 @@ class User extends UserSec implements Account {
 	Boolean emailOk
 	Boolean federated
 	Date dateCreated
-//	String type
+	Date lastUpdated
+
+//	static hasMany = [friends: Friendship, friendedBy: Friendship]
+//	static mappedBy = [friends: "friend", friendedBy: "user"]
+	static hasMany = [friendship: Friendship]
+//	static mappedBy = [friends: "friend"]
+
+	String toString(){
+    	return username
+  	}
 	
     static constraints = {
 		firstName nullable: true
@@ -23,7 +32,8 @@ class User extends UserSec implements Account {
 		emailOk nullable: true
 		photoUrl nullable: true		
 		federated nullable: true		
-    }
+    }
+
 
 	@Override
 	public String getDisplayName() {

@@ -100,6 +100,27 @@ log4j = {
 //		  'org.springframework.security.web.authentication'
 }
 
+//grails.plugin.inviter.facebook.key='197755966948551'
+//grails.plugin.inviter.facebook.secret='5dc5ace6405e5882511e6dd177aa5f77'
+grails.plugin.inviter.facebook.key='106080722853795'
+grails.plugin.inviter.facebook.secret='d5f1cbe4ce5799bf4452b2b5a5787774'
+
+grails.plugin.inviter.yahoo.key='dj0yJmk9T21LU3dnazNxUnJ2JmQ9WVdrOWRGQlBhWFZ4TlRZbWNHbzlNVEV6TkRreU5qUTJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD04Nw--'
+grails.plugin.inviter.yahoo.secret= 'a21f29aa15b65c2394a5cd18a5f266eba15fcc91'
+grails.plugin.inviter.google.key='inviter.cloudfoundry.com'
+grails.plugin.inviter.google.secret='mIE86xbAHcH5Cr2J9BYoz0k9'
+grails.plugin.inviter.linkedin.key='k25tupolcvf1'
+grails.plugin.inviter.linkedin.secret='KBtxC418sdmu5eur'
+
+//grails.plugin.inviter.twitter.key='G8rCU7AHBsZAbeLUAP0i7Q'
+//grails.plugin.inviter.twitter.secret='BKbt1ygWu0q4xsLuJ8bhjYvegojVHz2GXn1Z5leoXN8'
+grails.plugin.inviter.twitter.key='hEa3ktzqOC47av7haygA'
+grails.plugin.inviter.twitter.secret='MHukMsTmPnJ6bzhChKqVO3iLsWs2uBbFRraYR8WC1w'
+
+grails.plugin.inviter.windowslive.key='0000000040062703'
+grails.plugin.inviter.windowslive.secret='uuQUGpig3kbv14SdlGwPdHYS86eVWlRc'
+//grails.plugin.inviter.debug = true
+
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.orbsoft.roadz.domain.UserSec'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.orbsoft.roadz.domain.UserSecRoleSec'
@@ -110,3 +131,18 @@ grails.plugins.springsecurity.authority.className = 'com.orbsoft.roadz.domain.Ro
 //	'rememberMeAuthenticationProvider']
 // for development of deployments only, remove before final deploy
 grails.gsp.enable.reload=true
+grails.gorm.failOnError=true
+
+grails {
+   mail {
+     host = "smtp.gmail.com"
+     port = 465
+     username = "mmcc007@gmail.com"
+     password = "H3ntra\$\$"
+     props = ["mail.smtp.auth":"true",             
+              "mail.smtp.socketFactory.port":"465",
+              "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+              "mail.smtp.socketFactory.fallback":"false"]
+
+} }
+grails.mail.overrideAddress="mmccabe@orbsoft.com"

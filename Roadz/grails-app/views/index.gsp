@@ -4,11 +4,40 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<title>ByWaze</title>
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/base.css">
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/TabBar.css">
-<!-- 	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js" djConfig="parseOnLoad: true, async: true, mblAlwaysHideAddressBar: true"></script> -->
+	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/base.css">
+	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/TabBar.css">
+		<script type="text/javascript">
+			
+			var dojoConfig = (function(){
+				var base = location.href.split("/");
+				base.pop();
+				base = base.join("/");
+				
+				return {
+					parseOnLoad: true,
+					mblAlwaysHideAddressBar: true,
+					async: false,
+					isDebug: true,
+					packages: [{
+						name: "bywaze",
+						location: base + "/js/bywaze"
+					}]
+				};
+			})();
+			
+		</script>	
+<!-- 	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js" djConfig="parseOnLoad: true, async: true, mblAlwaysHideAddressBar: true"></script> 
     <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js" djConfig="parseOnLoad: true, async: false, mblAlwaysHideAddressBar: true"></script>
+-->
+    <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js"></script>
 	<script type="text/javascript" src="src.js"></script>
+<script type="text/javascript">
+require([
+     	"dojox/mobile/parser",
+     	"dojox/mobile",
+     	"dojox/mobile/ScrollableView",
+     ]);
+</script>
 	<link href="demo.css" rel="stylesheet">
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
@@ -47,12 +76,21 @@
 	    });
 	</script>
 
+    <script type="text/javascript" src="scroll/iscroll.js"></script>
     <script src="http://maps.google.com/maps/api/js?v=3.8&key=AIzaSyCPgZBX3_gTNaU9hIyPU_6iKkpqcbLUjEk&sensor=true" type="text/javascript"></script>
 	
     <link rel="stylesheet" type="text/css" href="chat/chat.css">
     <script type="text/javascript" src="chat/geolocate.js"></script>
     <script type="text/javascript" src="chat/chat.js"></script>
 	<script type="text/javascript">
+            var myScroll;
+            function loaded() {
+            	//myScroll = new iScroll('standard' , { checkDOMChanges: true });
+            	myScroll = new iScroll('standard');
+            }
+            document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+            document.addEventListener('DOMContentLoaded', loaded, false);
+
 	    var config = {
 				contextPath : '${request.contextPath}'
 			};
@@ -72,6 +110,8 @@
 		}
 		google.maps.event.addDomListener(window, 'load', initialize);
 	</script>
+<link type="text/css" media="all" href="scroll/iscroll.css" rel="stylesheet">
+<link href="scroll/genericdrag.css" rel="stylesheet" type="text/css">
 	<link href="chat/genericdrag.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="chat/genericdrag.js"></script>
 	
@@ -87,32 +127,35 @@
 		</script>
 <%-- 			<div>Welcome back <sec:username/>!</div> --%>
 
-		<div id="friends" dojoType="dojox.mobile.ScrollableView" threshold="10000000">
-			<h1 dojoType="dojox.mobile.Heading" label="ByWaze" back="Back"
-				moveTo="back">
+		<div id="map" dojoType="dojox.mobile.ScrollableView" threshold="10000000">
+			<h1 dojoType="dojox.mobile.Heading" label="ByWaze" back="Friends" moveTo="friends">
 				<div dojoType="dojox.mobile.ToolBarButton" label="Edit"
 					class="mblColorBlue" style="width: 25px; float: right"></div>
 			</h1>
 			<div id="map_canvas"></div>
-	<div id="boxB" class="dragbox dragcontent"
-		style="left: 100px; top: 50px;">
-		<div class="dragcontent" style="width: 14em;"
-			ontouchstart="dragStart(event, 'boxB')"
-			onmousedown="dragStart(event, 'boxB')">
-			dragcontent
+			<div id="boxc" class="box" style="left: 12px; top: 50px; z-index: 0; ">
+				<div class="bar" 
+					onmousedown="dragStart(event, 'boxc')"
+					ontouchstart="dragStart(event, 'boxc')"
+					>My Circle</div>
+				<div class="content" >
 			<div id="chatroom">
-				<!-- 	<div id="map_canvas" style="width:50%; height:240px;float:left;"></div> -->
-				<div id="chat"></div>
-				<div id="members"></div>
-				<div id="input">
-					<div id="joined">
-						<input id="phrase" type="text" />
-						<button id="sendButton" class="button">Send</button>
-						<!--             <button id="leaveButton" class="button">Leave</button> -->
-					</div>
+				<div id="chat">
+			<div id="standard">
+				<div class="scroller">
+					<ul id="myList">
+					</ul>
 				</div>
 			</div>
-		</div>
+				</div>
+			    <div id="members"></div>
+			        <div id="joined">
+			            <input id="phrase" type="text" />
+			            <button id="sendButton" class="button">Send</button>
+			        </div>
+			    </div>
+			</div>
+
 	</div>
 
 		</div>
@@ -313,9 +356,38 @@
 		</div>
 	</div>
 
-	<div id="checkin" dojoType="dojox.mobile.ScrollableView">
-		<h1 dojoType="dojox.mobile.Heading" fixed="top">Categories</h1>
+	<div id="friends" dojoType="dojox.mobile.ScrollableView">
+		<h1 dojoType="dojox.mobile.Heading" fixed="top">ByWaze
+				<div dojoType="dojox.mobile.ToolBarButton" label="Map" moveTo="map"
+					class="mblColorBlue" style="width: 25px; float: left"></div>
+				<div id="addFriendsButton" dojoType="dojox.mobile.ToolBarButton" label="Add" moveTo="contacts"
+					class="mblColorBlue" style="width: 25px; float: right"></div>
+		</h1>
 		<ul dojoType="dojox.mobile.EdgeToEdgeList" class="list1" id="categ1">
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 1</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 2</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 3</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 4</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 5</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 6</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 7</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 8</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 9</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 10</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 11</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 12</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 13</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 14</li>
+			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 15</li>
+		</ul>
+	</div>
+
+	<div id="contacts" dojoType="dojox.mobile.ScrollableView">
+		<h1 dojoType="dojox.mobile.Heading" fixed="top" back="Friends" moveTo="friends" >Contacts
+				<div id="inviteButton" dojoType="dojox.mobile.ToolBarButton" label="Invite"
+					class="mblColorBlue" style="width: 25px; float: right"></div>
+		</h1>
+		<ul dojoType="dojox.mobile.EdgeToEdgeList" class="list1" id="categ2">
 			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 1</li>
 			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 2</li>
 			<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem">Category 3</li>
@@ -446,9 +518,11 @@
 	</div>
 
 	<ul dojoType="dojox.mobile.TabBar" fixed="bottom" style="border-bottom:none;">
- 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-16.png" icon2="images/tab-icon-16h.png" selected="true" moveTo="friends">Friends</li> 
+ 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-16.png" icon2="images/tab-icon-16h.png" selected="true" moveTo="map">Friends</li> 
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-15.png" icon2="images/tab-icon-15h.png" moveTo="orig">Orig</li>
+<!--
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-15.png" icon2="images/tab-icon-15h.png" moveTo="checkin">CheckIn</li>
+-->
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-10.png" icon2="images/tab-icon-10h.png" moveTo="top25">Top 25</li>
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-11.png" icon2="images/tab-icon-11h.png" moveTo="search">Search</li>
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-13.png" icon2="images/tab-icon-13h.png" moveTo="article">Updates</li>
