@@ -15,7 +15,7 @@ class InviterController {
 		def service = resolveService(params.provider)
 
 //		def authInfo = service.getAuthDetails(createLink(action: 'contacts', controller: 'inviter', absolute: 'true', params: [provider: params.provider]))
-		def authInfo = service.getAuthDetails(createLink(action: 'mobapp14.gsp', controller: 'tmp5', absolute: 'true', params: [provider: params.provider]))
+		def authInfo = service.getAuthDetails(createLink(controller: '.', absolute: 'true', params: [provider: params.provider]))
 
 		if (authInfo.requestToken)
 		{

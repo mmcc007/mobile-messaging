@@ -73,8 +73,6 @@ class TwitterInviterService {
 		request.addBodyParameter( 'text', ( attrs.message + " " + attrs.link?:'' ).trim() )
 		authService.signRequest( attrs.accessToken, request )
 		return request.send()
-//		def response = JSON.parse( response )
-//		return response
 	}
 
 	private def sendRequest( accessToken, method, url ){

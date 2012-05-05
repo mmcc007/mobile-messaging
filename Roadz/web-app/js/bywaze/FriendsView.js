@@ -77,10 +77,11 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 			//refreshButton.select();
 
 			// For every account, add the deferred to the list
-			var defs = [], accounts = bywaze.ACCOUNTS;
-			for(var account in accounts) {
+//			var defs = [], accounts = bywaze.ACCOUNTS;
+			var defs = [];
+//			for(var account in accounts) {
 				// If the account is enabled...
-				if(accounts[account].enabled) {
+//				if(accounts[account].enabled) {
 					// Get tweets!
 //					defs.push(ioScript.get({
 //						callbackParamName: "callback",
@@ -103,8 +104,8 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 							}
 						}));
 
-				}
-			}
+//				}
+//			}
 
 			// Create a deferredlist to handle when all friends are returned
 			// Add this.onTweetsReceived as the callback

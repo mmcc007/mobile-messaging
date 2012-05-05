@@ -6,6 +6,7 @@
 	<title>ByWaze</title>
 	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/base.css">
 	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/TabBar.css">
+		<link href="js/bywaze/resources/FriendsView.css" rel="stylesheet" />
 		<script type="text/javascript">
 			
 			var dojoConfig = (function(){
@@ -14,8 +15,7 @@
 				base = base.join("/");
 				
 				return {
-					parseOnLoad: true,
-					mblAlwaysHideAddressBar: true,
+					//parseOnLoad: true,
 					async: false,
 					isDebug: true,
 					packages: [{
@@ -25,18 +25,10 @@
 				};
 			})();
 			
-		</script>	
-<!-- 	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js" djConfig="parseOnLoad: true, async: true, mblAlwaysHideAddressBar: true"></script> 
-    <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js" djConfig="parseOnLoad: true, async: false, mblAlwaysHideAddressBar: true"></script>
--->
+		</script>
     <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js"></script>
 	<script type="text/javascript" src="src.js"></script>
 <script type="text/javascript">
-require([
-     	"dojox/mobile/parser",
-     	"dojox/mobile",
-     	"dojox/mobile/ScrollableView",
-     ]);
 </script>
 	<link href="demo.css" rel="stylesheet">
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -115,6 +107,41 @@ require([
 	<link href="chat/genericdrag.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="chat/genericdrag.js"></script>
 	
+		<script>
+			var provider;
+			var code;
+		(function(){
+			
+			require(["dojox/mobile/parser", "dojox/mobile/TabBar", "bywaze/FriendsView", "bywaze/ContactsView", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(mobileParser, TabBar, FriendsView, ContactsView, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
+				// If Android....
+				if(dm.currentTheme == "android") {
+					var imagePath = "../js/tweetview/resources/images/";
+					// Update image path on bottom tabbar
+					TweetView.prototype.iconLoading = imagePath + "androidLoading.gif";
+					// Add a new "iconLoading" attribute to the TweetView instances
+					//domAttr.set(document.getElementById("tabBar"), "iconBase", imagePath + "iconStripAndroid.png");
+				}
+
+				// Parse the page!
+				mobileParser.parse();
+
+				var params = ioQuery.queryToObject(window.location.search.slice(1));
+				if (params.provider) {
+					// turn on contacts view
+					console.warn("turn on contacts view: provider: ", params.provider);
+					domStyle.set("map", "display", "none")
+				} else {
+					// turn on map view
+					console.warn("turn on map view");
+//					domStyle.set("map", "display", "block")
+					domStyle.set("contacts", "display", "none")					
+				}
+
+			});
+						
+
+		})();
+		</script>
 	
 </head>
 <body style="visibility:hidden;">
@@ -125,9 +152,8 @@ require([
 		<script>
 			room.join.call(dojo, '<sec:username/>');
 		</script>
-<%-- 			<div>Welcome back <sec:username/>!</div> --%>
 
-		<div id="map" dojoType="dojox.mobile.ScrollableView" threshold="10000000">
+		<div id="map" dojoType="dojox.mobile.ScrollableView" threshold="10000000" data-dojo-props="selected: true">
 			<h1 dojoType="dojox.mobile.Heading" label="ByWaze" back="Friends" moveTo="friends">
 				<div dojoType="dojox.mobile.ToolBarButton" label="Edit"
 					class="mblColorBlue" style="width: 25px; float: right"></div>
@@ -139,27 +165,61 @@ require([
 					ontouchstart="dragStart(event, 'boxc')"
 					>My Circle</div>
 				<div class="content" >
-			<div id="chatroom">
-				<div id="chat">
-			<div id="standard">
-				<div class="scroller">
-					<ul id="myList">
-					</ul>
+					<div id="chatroom">
+						<div id="chat">
+							<div id="standard">
+								<div class="scroller">
+									<ul id="myList">
+									</ul>
+								</div>
+							</div>
+						</div>
+					    <div id="members"></div>
+					     <div id="joined">
+					        <input id="phrase" type="text" />
+					        <button id="sendButton" class="button">Send</button>
+					    </div>
+					</div>
 				</div>
 			</div>
-				</div>
-			    <div id="members"></div>
-			        <div id="joined">
-			            <input id="phrase" type="text" />
-			            <button id="sendButton" class="button">Send</button>
-			        </div>
-			    </div>
-			</div>
-
-	</div>
-
 		</div>
 
+		<div id="friends" data-dojo-type="bywaze.FriendsView">
+			<h1 dojoType="dojox.mobile.Heading" fixed="top"
+				label="Friends" back="Back" moveTo="map" transition="fade">
+				<div id="contactsButton" dojoType="dojox.mobile.ToolBarButton" label="Add" moveTo="invite"
+					class="mblColorBlue" style="width: 25px; float: right;" transition="slide"></div>
+			</h1>
+			<div data-dojo-type="dojox.mobile.RoundRectList" class="friendsviewList"></div>
+		</div>
+
+		<div id="invite" data-dojo-type="dojox.mobile.ScrollableView" data-dojo-props="">
+		<h1 dojoType="dojox.mobile.Heading" fixed="top"
+			label="Invite" back="Back" moveTo="friends">
+		</h1>
+			<div data-dojo-type="dojox.mobile.RoundRectList" class="friendsviewList">
+				<ul>
+					<g:each in="${[ 'facebook', 'twitter' ]}" var="provider">
+						<li>
+							<riv:invitationLink provider="${provider}"><img
+									src="${resource(dir: 'images', file: provider + '.png')}"/> ${provider}</riv:invitationLink>
+						</li>
+					</g:each>
+				</ul>
+			</div>
+		</div>
+
+		<div id="contacts" data-dojo-type="bywaze.ContactsView" data-dojo-props="selected: true">
+			<h1 dojoType="dojox.mobile.Heading" fixed="top"
+				label="Contacts" back="Back" moveTo="invite">
+				<div id="inviteButton" dojoType="dojox.mobile.ToolBarButton" label="Inv" 
+					class="mblColorBlue inviteButton" style="width: 25px; float: right;"></div>
+			</h1>
+			<pre id="formResultNode"></pre>
+			<form id="formNode">
+				<ul data-dojo-type="dojox.mobile.EdgeToEdgeList" class="friendsviewList" select="multiple"></ul>
+			</form>
+		</div>
 
 		<div id="orig" dojoType="dojox.mobile.View" selected="false">
 		<ul dojoType="dojox.mobile.TabBar" barType="segmentedControl" fixed="top">
@@ -356,7 +416,7 @@ require([
 		</div>
 	</div>
 
-	<div id="friends" dojoType="dojox.mobile.ScrollableView">
+	<div id="friends2" dojoType="dojox.mobile.ScrollableView">
 		<h1 dojoType="dojox.mobile.Heading" fixed="top">ByWaze
 				<div dojoType="dojox.mobile.ToolBarButton" label="Map" moveTo="map"
 					class="mblColorBlue" style="width: 25px; float: left"></div>
@@ -382,9 +442,9 @@ require([
 		</ul>
 	</div>
 
-	<div id="contacts" dojoType="dojox.mobile.ScrollableView">
+	<div id="contacts2" dojoType="dojox.mobile.ScrollableView">
 		<h1 dojoType="dojox.mobile.Heading" fixed="top" back="Friends" moveTo="friends" >Contacts
-				<div id="inviteButton" dojoType="dojox.mobile.ToolBarButton" label="Invite"
+				<div id="inviteButton2" dojoType="dojox.mobile.ToolBarButton" label="Invite"
 					class="mblColorBlue" style="width: 25px; float: right"></div>
 		</h1>
 		<ul dojoType="dojox.mobile.EdgeToEdgeList" class="list1" id="categ2">
