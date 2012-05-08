@@ -55,7 +55,6 @@ class FacebookInviterService{
 	}
 
 	def sendMessage = { attrs ->
-		printf "Entered FacebookInviterService.sendMessage: attrs=" + attrs
 
 		OAuthRequest request = new OAuthRequest( Verb.POST, "https://graph.facebook.com/${ attrs.contact }/feed" )
 
