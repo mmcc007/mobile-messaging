@@ -108,8 +108,6 @@
 	<script type="text/javascript" src="chat/genericdrag.js"></script>
 	
 		<script>
-			var provider;
-			var code;
 		(function(){
 			
 			require(["dojox/mobile/parser", "dojox/mobile/TabBar", "bywaze/FriendsView", "bywaze/ContactsView", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(mobileParser, TabBar, FriendsView, ContactsView, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
@@ -125,24 +123,11 @@
 				// Parse the page!
 				mobileParser.parse();
 
-				var params = ioQuery.queryToObject(window.location.search.slice(1));
-				if (params.provider) {
-					// turn on contacts view
-					console.warn("turn on contacts view: provider: ", params.provider);
-					domStyle.set("map", "display", "none")
-				} else {
-					// turn on map view
-					console.warn("turn on map view");
-//					domStyle.set("map", "display", "block")
-					domStyle.set("contacts", "display", "none")					
-				}
-
 			});
 						
 
 		})();
 		</script>
-	
 </head>
 <body style="visibility:hidden;">
 		<sec:ifNotLoggedIn>
@@ -587,6 +572,29 @@
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-11.png" icon2="images/tab-icon-11h.png" moveTo="search">Search</li>
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-13.png" icon2="images/tab-icon-13h.png" moveTo="article">Updates</li>
 	</ul>
+		<script>
+			var provider;
+			var code;
+		(function(){
+			
+			require(["dojox/mobile/parser", "dojox/mobile/TabBar", "bywaze/FriendsView", "bywaze/ContactsView", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(mobileParser, TabBar, FriendsView, ContactsView, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
+				var params = ioQuery.queryToObject(window.location.search.slice(1));
+				if (params.provider) {
+					// turn on contacts view
+					console.warn("turn on contacts view: provider: ", params.provider);
+					domStyle.set("map", "display", "none")
+				} else {
+					// turn on map view
+//					console.warn("turn on map view");
+//					domStyle.set("map", "display", "block")
+					domStyle.set("contacts", "display", "none")					
+				}
+
+			});
+						
+
+		})();
+		</script>	
 	    </sec:ifLoggedIn>
 </body>
 </html>
