@@ -5,16 +5,20 @@ import grails.converters.*
 
 class InviterController {
 
+	def springSecurityService
 	def grailsApplication
 
-	def index = { }
+	def index = { 
+		// get here from link generated below
+		// write params out to session and redirect to login prompt
+		session.inviter = params.inviter
+		session.invitee = params.invitee
+		redirect url: "/"
+	}
 
 	def invite = {
-		println "invite entered: params: " + params
-
 		def service = resolveService(params.provider)
 
-//		def authInfo = service.getAuthDetails(createLink(action: 'contacts', controller: 'inviter', absolute: 'true', params: [provider: params.provider]))
 		def authInfo = service.getAuthDetails(createLink(controller: '.', absolute: 'true', params: [provider: params.provider]))
 
 		if (authInfo.requestToken)
@@ -27,11 +31,11 @@ class InviterController {
 	}
 
 	def sendInvites = {
-		println "sendInvites entered: params: " + params
 		def service = resolveService(params.provider)
 		def accessToken = session["${params.provider}_accessToken"]
 
-		def message = params.message + ' ' + ( grailsApplication.config.grails.plugin.inviter.defaultMessage ?: '' ) as String
+		def message = ( grailsApplication.config.grails.plugin.inviter.defaultMessage ?: params.message ) as String
+		def description = ( grailsApplication.config.grails.plugin.inviter.defaultDescription ?: params.description ) as String
 
 		if( grailsApplication.config.grails.plugin.inviter.debug ){
 			render """
@@ -40,32 +44,31 @@ class InviterController {
 				<body>
 				This is a debug screen.<br/>
 				In a real life situation, I would have sent ${ message } to ${ params.addresses } on ${ params.provider }
+
 				</body>
 				</html>
 
 			"""
+
 			return
 
 		} else {
-
+			
 			if (service.useEmail)
 			{
 				params.addresses.split(',').each { address ->
 					sendMail {
 						to: address
 						subject: params.subject
-						message: params.message
+						message: message
 					}
 				}
-			} else
-			{
+			} else {
 				params.addresses.split(',').each { address ->
-					def response = service.sendMessage( accessToken: accessToken, link: params.link, message: params.message, description: params.description, contact:address, subject: params.subject )
-					printf "response=" + response
-	
+					def link = createLink(absolute: 'true', params: [inviter: "fffffffff", invitee: address]) as String
+					def response = service.sendMessage( accessToken: accessToken, link: link, contact:address, message: message, subject: params.subject, description: description )
 					render response
 					return
-
 				}
 			}
 
@@ -82,12 +85,10 @@ class InviterController {
 		session["${params.provider}_accessToken"] = accessToken
 		def contacts = service.getContacts(accessToken)
 		println "contacts returned: " + contacts
-		//render(view: '/inviter/contacts', model: [contacts: contacts, provider: params.provider], plugin: 'inviter')
 		render contacts as JSON
 	}
 
 	def sendEmail = {
-		println "sendEmail entered: params: " + params
 				sendMail {
 						to params.address
 						subject params.subject
@@ -121,8 +122,4 @@ class InviterController {
 
 	}
 
-	def test = {
-		println "test entered: params: " + params
-		render params as JSON
-	}	
 }
