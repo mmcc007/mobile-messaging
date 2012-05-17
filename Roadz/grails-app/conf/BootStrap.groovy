@@ -3,7 +3,6 @@ import java.util.Date;
 //import com.google.apps.easyconnect.demos.easyrpbasic.web.data.AccountServiceImpl;
 //import com.google.apps.easyconnect.demos.easyrpbasic.web.util.Constants;
 import com.google.apps.easyconnect.easyrp.client.basic.Context;
-import com.google.apps.easyconnect.easyrp.client.basic.data.AccountService;
 import com.google.apps.easyconnect.easyrp.client.basic.session.RpConfig;
 import com.google.apps.easyconnect.easyrp.client.basic.session.SessionBasedSessionManager;
 import com.google.apps.easyconnect.easyrp.client.basic.session.SessionManager;
@@ -22,6 +21,7 @@ class BootStrap {
 		if (Environment.isDevelopmentMode()) {
 
 		        def samples = [
+		            'inviter' : [ fullName: 'inviter', email: "inviter" ],
 		            'maurice' : [ fullName: 'Maurice', email: "mmcc@orbsoft.com" ],
 		            'chuck_norris' : [ fullName: 'Chuck Norris', email: "chuck@example.org" ],
 		            'glen' : [ fullName: 'Glen Smith', email: "glen@example.org" ],
@@ -59,15 +59,14 @@ class BootStrap {
 					def chuck = User.findByUsername("chuck_norris")
 					println "glen == " + glen.username
 
-//					def friendship = new Friendship(status: "glen")
-//					maurice.addToFriendship(new Friendship(status: "glen")).save()
-					maurice.addToFriendship(new Friendship(friend: glen, status: "sss")).save()
-					maurice.addToFriendship(new Friendship(friend: chuck, status: "sss")).save()
-//					friendship.save()
-//					def friendship = new Friendship()
-//					friendship.user = maurice
-//					friendship.friend = glen
-//					friendship.save()
+					//maurice.addToFriendship(new Friendship(friend: glen, status: "sss")).save()
+					//maurice.addToFriendship(new Friendship(friend: chuck, status: "sss")).save()
+
+					new Friendship(friendedBy: maurice, friendOf: glen, status: "sss").save()
+					new Friendship(friendedBy: maurice, friendOf: chuck, status: "sss").save()
+					new Friendship(friendedBy: chuck, friendOf: maurice, status: "sss").save()
+//					new Friendship(friendedBy: maurice, friendOf: maurice, status: "sss").save()
+					//maurice.addToFriendship(new Friendship(friend: chuck, status: "sss")).save()
 					println "friendship saved"
 			}
 	    }
@@ -84,7 +83,6 @@ class BootStrap {
 	private void initEasyRpContext() {
 		RpConfig config = new RpConfig.Builder().sessionUserKey(Constants.SESSION_KEY_LOGIN_USER)
 			.homeUrl(Constants.HOME_PAGE_URL).signupUrl(Constants.SIGNUP_PAGE_URL).build();
-//		AccountService accountService = new AccountServiceImpl();
 		SessionManager sessionManager = new SessionBasedSessionManager(config);
 		Context.setConfig(config);
 		Context.setAccountService(accountService);
