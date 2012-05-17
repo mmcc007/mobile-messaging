@@ -1,13 +1,13 @@
-/**
- *
- */
-
+//package com.orbsoft.roadz.service
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -26,15 +26,38 @@ import org.cometd.server.filter.DataFilter;
 import org.cometd.server.filter.DataFilterMessageListener;
 import org.cometd.server.filter.JSONDataFilter;
 import org.cometd.server.filter.NoMarkupFilter;
+import org.springframework.beans.factory.InitializingBean;
 
+//@javax.inject.Named // Tells Spring that this is a bean
+//@javax.inject.Singleton // Tells Spring that this is a Singletonon
 @Service("chat")
-public class ChatService
-{
-    private final ConcurrentMap<String, Map<String, String>> _members = new ConcurrentHashMap<String, Map<String, String>>();
+//public class ChatService implements InitializingBean {
+public class ChatService {
+//    static scope = "singleton"
+
+//    def serviceMethod() {
+//    	println "serviceMethodx: hello"
+//    	getClient("demo", "mmcc007@gmail.com")
+//    }
+
+//    private String privateStr = "privateStr";
+    private static final ConcurrentMap<String, Map<String, String>> _members = new ConcurrentHashMap<String, Map<String, String>>();
+ //   private final Map<String, Map<String, String>> _members = new HashMap<String, Map<String, String>>();
+
     @Inject
     private BayeuxServer _bayeux;
     @Session
     private ServerSession _session;
+
+    static transactional = true
+
+    void afterPropertiesSet() {
+        println "afterPropertiesSet"
+//        bayeuxSession = bayeux.newLocalSession()
+//        bayeuxSession.handshake()
+//        bayeuxSession.getChannel('/requests/search').subscribe(new MySubscriberListener
+//        (this, 'findAccountsToFollow', ['q', 'params']))
+    }
 
     @SuppressWarnings("unused")
 //    @Configure ({"/chat/**","/members/**"})
@@ -71,6 +94,9 @@ public class ChatService
     @Listener("/service/members")
     public void handleMembership(ServerSession client, ServerMessage message)
     {
+        println "handleMembership: client=" + client
+        println "handleMembership: message=" + message
+
         Map<String, Object> data = message.getDataAsMap();
         final String room = ((String)data.get("room")).substring("/chat/".length());
         Map<String, String> roomMembers = _members.get(room);
@@ -115,6 +141,11 @@ public class ChatService
     @Listener("/service/privatechat")
     public void privateChat(ServerSession client, ServerMessage message)
     {
+        println "chatService:privateChatx client=" + client
+        println "chatService:privateChatx message=" + message
+        println "chatService:privateChatx _members=" + _members
+        //serviceMethod()
+
         Map<String,Object> data = message.getDataAsMap();
         String room = ((String)data.get("room")).substring("/chat/".length());
         Map<String, String> membersMap = _members.get(room);
@@ -130,6 +161,8 @@ public class ChatService
 
         for (String peerName : peerNames)
         {
+            println "chatService:privateChat peerName=" + peerName
+            println "chatService:privateChat clientId=" + _members.get(room).get(peerName)
             String peerId = membersMap.get(peerName);
             if (peerId!=null)
             {
@@ -162,6 +195,33 @@ public class ChatService
         }
     }
 
+    public ServerSession getClient(String room, String userName) {
+        println "chatService:getClientId room=" + room
+        println "chatService:getClientId userName=" + userName
+        Map<String, String> roomMembers = _members.get(room)
+       // println "chatService:getClientId privateStr=" + privateStr
+        println "chatService:getClientId roomMembers=" + roomMembers
+        String clientId = roomMembers.get(userName)
+        println "chatService:getClientId clientId=" + clientId
+        return _bayeux.getSession(clientId)
+    }
+
+    public Set<String> findRooms(String username) {
+        // find rooms that user is currently a member of
+        println "chatService:findRooms _members=" + _members
+        Set<String> rooms = new HashSet<String>();
+        for (String room : _members.keySet()) {
+            // ...
+            Map<String, String> roomMembers = _members.get(room);
+        println "chatService:findRooms roomMembers=" + roomMembers
+             if (roomMembers.containsKey(username)) {
+                rooms.add(room)
+            }
+        }
+        println "chatService:findRooms rooms=" + rooms
+        return rooms
+    }
+
     class BadWordFilter extends JSONDataFilter
     {
         @Override
@@ -173,3 +233,4 @@ public class ChatService
         }
     }
 }
+

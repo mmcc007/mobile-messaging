@@ -17,6 +17,7 @@ var room = {
 //        dojo.addClass("joined", "hidden");
 //        dojo.byId('username').focus();
 //
+
         dojo.query("#username").attr({
             "autocomplete": "off"
         }).onkeyup(function(e)
@@ -205,7 +206,16 @@ var room = {
         }
         else if (message.data.scope == "private")
         {
-            chat.innerHTML += "<li><span class=\"private\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">[private]&nbsp;" + text + "</span></span></li>";
+            // check if this is a system message
+            if (message.data.user = "System") {
+                require(["dojo/_base/connect"], function(connect){
+                    connect.publish("/bywaze/showSystemMsg", [{ text:text }]);
+                });
+                //systemMsg.innerHTML = text;
+                //dijit.registry.byId('notifier2').show();
+                //dijit.byId('calPicker').show(this, ['above-centered','below-centered','after','before']);
+            } else
+                chat.innerHTML += "<li><span class=\"private\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">[private]&nbsp;" + text + "</span></span></li>";
         }
         else
         {

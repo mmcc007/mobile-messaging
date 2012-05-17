@@ -13,14 +13,14 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 		'</div>',
 
 		// Icon for loading...
-		iconLoading: require.toUrl("tweetview/resources/images/loading.gif"),
+		iconLoading: _base + "/js/bywaze/resources/images/loading.gif",
 
 		// URL to pull tweets from; simple template included
 		//serviceUrl: "http://twitter.com/statuses/user_timeline/${account}.json?since_id=${since_id}",
 //		serviceUrl: "http://192.168.0.5:8080/Roadz/inviter/contacts?provider=" + provider + "&code=" + code,
 //		sendInviteUrl: "http://192.168.0.5:8080/Roadz/inviter/sendInvites?provider=" + provider + "&code=" + code,
-		contactsUrl: window.location.origin + "/Roadz/inviter/contacts" + window.location.search,
-		sendInviteUrl: window.location.origin + "/Roadz/inviter/sendInvites" + window.location.search,
+		contactsUrl: _base + "/inviter/contacts" + window.location.search,
+		sendInviteUrl: _base + "/inviter/sendInvites" + window.location.search,
 		//sendInviteUrl: "http://localhost:8080/Roadz/inviter/test?provider=" + provider + "&code=" + code,
 
 		// When the widgets have started....
@@ -42,7 +42,8 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 			// Add a click handler to the button that calls refresh
 			//aspect.after(this.refreshButton, "onClick", lang.hitch(this, "refresh"), true);
 			console.warn("My provider is: ", provider);
-			console.warn("My this.serviceUrl is: ", this.serviceUrl);
+			console.warn("My this.contactsUrl is: ", this.contactsUrl);
+			console.warn("My this.sendInviteUrl is: ", this.sendInviteUrl);
 
 			if (provider) this.refresh();
 		},
@@ -89,7 +90,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 							},
 							// The error handler
 							error: function() {
-								resultNode.innerHTML = "Your form could not be sent.";
+								resultNode.innerHTML = "sendInvites: Your form could not be sent.";
 							}
 						});
 
@@ -98,11 +99,13 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 
 		// Fires when friends are received from the controller
 		updateContent: function(contactsData) {
+			// remove existing items
+			this.listNode.innerHTML = "";
 			// For every friend received....
 			baseArray.forEach(contactsData[0][1], function(contact) {
 				// Get the user's screen name
 				var name = contact.name;
-				var avatar = contact.photo;
+				var avatar = contact.photoUrl;
 				var id = contact.address;
 
 				// Create a new list item, inject into list
@@ -118,27 +121,6 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 					id: id
 				});
 			}, this);
-			new TextBox({
-					"name": "message",
-					"type": "hidden",
-					"value": "test message",
-				}).placeAt(this.listNode, "first");
-			new TextBox({
-					"name": "subject",
-					"type": "hidden",
-					"value": "test subject",
-				}).placeAt(this.listNode, "first");
-			new TextBox({
-					"name": "link",
-					"type": "hidden",
-					"value": "test link",
-				}).placeAt(this.listNode, "first");
-			new TextBox({
-					"name": "description",
-					"type": "hidden",
-					"value": "test description",
-				}).placeAt(this.listNode, "first");
-
 
 			// Show the list now that we have content for it
 			this.showListNode(true);
@@ -150,9 +132,9 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 			console.info("JSON loaded from server:  ", contactData);
 
 			// If we receive new tweets, update content
-			if(contactData.length) {
+//			if(contactData.length) {
 				this.updateContent(contactData);
-			}
+//			}
 		},
 
 	});

@@ -12,7 +12,7 @@ grails.project.dependency.resolution = {
         // uncomment to disable ehcache
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "debug" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
@@ -55,6 +55,7 @@ grails.project.dependency.resolution = {
 	compile ":rest:0.6.1"
 	compile ":mail:1.0"
 //	compile ":inviter:0.3"
+
 
 //        runtime ":resources:1.1.6"
 

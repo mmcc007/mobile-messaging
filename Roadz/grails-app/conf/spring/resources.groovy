@@ -3,7 +3,17 @@
  * @author Maurice
  *
  */
+ import com.orbsoft.roadz.MyBeanImpl
 beans = {
+	myBean(MyBeanImpl) {
+        someProperty = 42
+        otherProperty = "blue"
+   }
+
+   // add into spring context to get access to clientIds and related info
+	chatService(ChatService) {
+   }
+
 //	preAuthenticatedUserDetailsService(org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService)
 //	preAuthenticatedAuthenticationProvider(org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider) {
 //      // attributes

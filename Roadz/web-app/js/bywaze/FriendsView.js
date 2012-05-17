@@ -24,24 +24,26 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 		'</div><div class="friendviewClear"></div>',
 
 		// Icon for loading...
-		iconLoading: require.toUrl("tweetview/resources/images/loading.gif"),
+//		iconLoading: require.toUrl("js/bywaze/resources/images/loading.gif"),
+		iconLoading: _base + "/js/bywaze/resources/images/loading.gif",
 
 		// URL to pull tweets from; simple template included
 		//serviceUrl: "http://twitter.com/statuses/user_timeline/${account}.json?since_id=${since_id}",
-		serviceUrl: window.location.origin + "/Roadz/user/friendsjson?username=maurice",
+		serviceUrl: _base + "/user/friendsjson",
 
 		// When the widgets have started....
 		startup: function() {
+			console.log("entered startup")
 			// Retain functionality of startup in dojox/mobile/ScrollableView
 			this.inherited(arguments);
 			
 			// Get the refresh button and image
-			//this.refreshButton = registry.byId(this.getElements("tweetviewRefresh", this.domNode)[0].id);
-			//this.iconNode = this.refreshButton.iconNode.childNodes[0];
+			this.refreshButton = registry.byId(this.getElements("friendsRefreshButton", this.domNode)[0].id);
+			this.iconNode = this.refreshButton.iconNode.childNodes[0];
 			//this.iconImage = this.iconNode.src;
 			
 			// Add a click handler to the button that calls refresh
-			//aspect.after(this.refreshButton, "onClick", lang.hitch(this, "refresh"), true);
+			aspect.after(this.refreshButton, "onClick", lang.hitch(this, "refresh"), true);
 
 			// Add CSS class for styling
 			//domClass.add(this.domNode, "tweetviewPane");
@@ -62,7 +64,8 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 //				},this);
 //			}), 60000);
 			
-			console.warn("My refresh button is: ", this.iconLoading);
+			console.warn("FriendsView: My refresh button is: ", this.iconLoading);
+			console.warn("FriendsView: My serviceUrl is: ", this.serviceUrl);
 
 			this.refresh();
 
@@ -72,8 +75,9 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 		refresh: function() {
 			
 			// Set the refresh icon
-			//var refreshButton = this.refreshButton;
-			//refreshButton.set("icon", this.iconLoading);
+			var refreshButton = this.refreshButton;
+			refreshButton.set("icon", this.iconLoading);
+			//this.refreshButton.iconNode.childNodes[0].src = this.iconLoading;
 			//refreshButton.select();
 
 			// For every account, add the deferred to the list
@@ -101,6 +105,8 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 							// The error handler
 							error: function() {
 								// Do nothing -- keep old content there
+								// TODO: retry if connect timeout
+								console.warn("FriendsView:refresh: error");
 							}
 						}));
 
@@ -143,28 +149,34 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 
 		// Fires when friends are received from the controller
 		updateContent: function(friendsData) {
+			// remove existing items
+			this.listNode.innerHTML = "";
 			// For every friend received....
-			baseArray.forEach(friendsData[0][1].friendship, function(f) {
-				// Get the user's screen name
-				var friend = f.friend;
-				var screenName = friend.username;
+			var friends = friendsData[0];
+			if (friends && dojo.isArray(friends) && friends.length>1 && friends[0] && friends[1] != null ) {
+				// remove first element from array
+				friends.shift();
+				baseArray.forEach(friends, function(friend) {
+					// Get the user's screen name
+					var screenName = friend.username;
+					if (!screenName) return;
+					// Create a new list item, inject into list
+					var item = new ListItem({
+						"class": "friendsviewListItem user-" + screenName
+					}).placeAt(this.listNode, "first");
 
-				// Create a new list item, inject into list
-				var item = new ListItem({
-					"class": "friendsviewListItem user-" + screenName
-				}).placeAt(this.listNode, "first");
-
-				// Update the list item's content using our template for tweets
-				item.containerNode.innerHTML = this.substitute(this.friendTemplateString, {
-					//text: this.formatTweet(tweet.text),
-					user: screenName,
-					name: friend.firstName + " " + friend.lastName,
-					avatar: friend.profile_image_url,
-					//time: this.formatTime(tweet.created_at),
-					//created_at: tweet.created_at,
-					id: friend.id
-				});
-			}, this);
+					// Update the list item's content using our template for tweets
+					item.containerNode.innerHTML = this.substitute(this.friendTemplateString, {
+						//text: this.formatTweet(tweet.text),
+						user: screenName,
+						name: friend.firstName + " " + friend.lastName,
+						avatar: friend.photoUrl,
+						//time: this.formatTime(tweet.created_at),
+						//created_at: tweet.created_at,
+						id: friend.id
+					});
+				}, this);
+			}
 			// Show the list now that we have content for it
 			this.showListNode(true);
 		},
@@ -254,20 +266,20 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 
 		// Event for when content is loaded from server
 		onFriendsReceived: function(friendData) {
-								// Log to console
-								//console.info("JSON loaded from server:  ", friendData);
+			// Log to console
+			console.info("JSON loaded from server:  ", friendData);
 			// Sort tweets
 			//tweetData = this.sortTweets(rawTweetData);
 
 			// Set the refresh icon back
-			//var refreshButton = this.refreshButton;
+			var refreshButton = this.refreshButton;
 			//this.iconNode.src = this.iconImage;
-			//refreshButton.select(true);
+			refreshButton.select(true);
 
 			// If we receive new tweets, update content
-			if(friendData.length) {
+//			if(friendData.length) {
 				this.updateContent(friendData);
-			}
+//			}
 		},
 
 		// Updates a tweet's viewability by user account enable change

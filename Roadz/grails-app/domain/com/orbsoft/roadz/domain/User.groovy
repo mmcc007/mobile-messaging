@@ -14,10 +14,9 @@ class User extends UserSec implements Account {
 	Date dateCreated
 	Date lastUpdated
 
-//	static hasMany = [friends: Friendship, friendedBy: Friendship]
-//	static mappedBy = [friends: "friend", friendedBy: "user"]
-	static hasMany = [friendship: Friendship]
-//	static mappedBy = [friends: "friend"]
+	static hasMany = [friendedBy: Friendship, friendOf: Friendship]
+	static mappedBy = [friendedBy: 'friendedBy', friendOf: 'friendOf']
+
 
 	String toString(){
     	return username

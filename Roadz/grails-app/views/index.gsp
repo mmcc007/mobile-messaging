@@ -8,24 +8,30 @@
 	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/TabBar.css">
 		<link href="js/bywaze/resources/FriendsView.css" rel="stylesheet" />
 		<script type="text/javascript">
-			
-			var dojoConfig = (function(){
+			function getBase() {
 				var base = location.href.split("/");
 				base.pop();
 				base = base.join("/");
-				
+				return base;
+			}
+			// make base global
+			_base = getBase();
+			
+			var dojoConfig = (function(){
+
 				return {
 					//parseOnLoad: true,
 					async: false,
 					isDebug: true,
 					packages: [{
 						name: "bywaze",
-						location: base + "/js/bywaze"
+						location: _base + "/js/bywaze"
 					}]
 				};
 			})();
 			
 		</script>
+	<script type="text/javascript" src="js/bywaze/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','SimpleDialog','TextBox','Button','Slider']"></script>
     <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js"></script>
 	<script type="text/javascript" src="src.js"></script>
 <script type="text/javascript">
@@ -110,7 +116,7 @@
 		<script>
 		(function(){
 			
-			require(["dojox/mobile/parser", "dojox/mobile/TabBar", "bywaze/FriendsView", "bywaze/ContactsView", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(mobileParser, TabBar, FriendsView, ContactsView, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
+			require(["dijit/registry", "dojox/mobile/parser", "dojox/mobile/TabBar", "dojox/mobile/Button", "bywaze/FriendsView", "bywaze/ContactsView", "bywaze/InvitesView", "bywaze/SystemDialog", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(registry, mobileParser, TabBar, Button, FriendsView, ContactsView, InvitesView, SystemDialog, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
 				// If Android....
 				if(dm.currentTheme == "android") {
 					var imagePath = "../js/tweetview/resources/images/";
@@ -123,8 +129,14 @@
 				// Parse the page!
 				mobileParser.parse();
 
+				hide = function(dlg){
+					registry.byId(dlg).hide();
+				}
+
 			});
 						
+			// Set current user for bywaze directly on the namespace
+			//username = "sec:username/>";
 
 		})();
 		</script>
@@ -137,6 +149,12 @@
 		<script>
 			room.join.call(dojo, '<sec:username/>');
 		</script>
+
+				<div id="dlg_message" data-dojo-type="bywaze.SystemDialog">
+					<div class="mblSimpleDialogTitle">Alert</div>
+					<div id="dlg_messagetext" class="mblSimpleDialogText">This is a sample dialog.</div>
+					<button data-dojo-type="dojox.mobile.Button" class="mblSimpleDialogButton" style="width:100px;" onclick="hide('dlg_message')">OK</button>
+				</div>
 
 		<div id="map" dojoType="dojox.mobile.ScrollableView" threshold="10000000" data-dojo-props="selected: true">
 			<h1 dojoType="dojox.mobile.Heading" label="ByWaze" back="Friends" moveTo="friends">
@@ -172,6 +190,9 @@
 		<div id="friends" data-dojo-type="bywaze.FriendsView">
 			<h1 dojoType="dojox.mobile.Heading" fixed="top"
 				label="Friends" back="Back" moveTo="map" transition="fade">
+				<div id="friendsRefreshButton" dojoType="dojox.mobile.ToolBarButton" label="Refresh" 
+					data-dojo-props="icon: '/Roadz/js/bywaze/resources/images/refresh.png'"
+					class="mblColorBlue friendsRefreshButton" style="width: 25px; float: right;" ></div>
 				<div id="contactsButton" dojoType="dojox.mobile.ToolBarButton" label="Add" moveTo="invite"
 					class="mblColorBlue" style="width: 25px; float: right;" transition="slide"></div>
 			</h1>
@@ -205,6 +226,19 @@
 				<ul data-dojo-type="dojox.mobile.EdgeToEdgeList" class="friendsviewList" select="multiple"></ul>
 			</form>
 		</div>
+
+	<div id="pendingInvites" dojoType="bywaze.InvitesView">
+			<h1 dojoType="dojox.mobile.Heading" fixed="top" label="Pending Invites">
+				<div id="acceptInviteButton" dojoType="dojox.mobile.ToolBarButton" label="Acpt" 
+					class="mblColorBlue acceptInviteButton" style="width: 30px; float: right;"></div>
+				<div id="pendingInvitesRefreshButton" dojoType="dojox.mobile.ToolBarButton" label="Refresh" 
+					class="mblColorBlue pendingInvitesRefreshButton" style="width: 35px; float: right;" ></div>
+			</h1>
+			<pre id="acceptInvitesFormResultNode"></pre>
+			<form id="acceptInvitesFormNode">
+				<ul data-dojo-type="dojox.mobile.EdgeToEdgeList" class="friendsviewList" select="multiple"></ul>
+			</form>
+	</div>
 
 		<div id="orig" dojoType="dojox.mobile.View" selected="false">
 		<ul dojoType="dojox.mobile.TabBar" barType="segmentedControl" fixed="top">
@@ -564,7 +598,7 @@
 
 	<ul dojoType="dojox.mobile.TabBar" fixed="bottom" style="border-bottom:none;">
  		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-16.png" icon2="images/tab-icon-16h.png" selected="true" moveTo="map">Friends</li> 
-		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-15.png" icon2="images/tab-icon-15h.png" moveTo="orig">Orig</li>
+		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-15.png" icon2="images/tab-icon-15h.png" moveTo="pendingInvites">Invites</li>
 <!--
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-15.png" icon2="images/tab-icon-15h.png" moveTo="checkin">CheckIn</li>
 -->

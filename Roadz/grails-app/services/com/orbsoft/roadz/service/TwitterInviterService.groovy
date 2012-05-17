@@ -67,7 +67,8 @@ class TwitterInviterService {
 	}
 
 	def sendMessage = { attrs ->
-		printf "Entered TwitterInviterService.sendMessage: attrs=" + attrs
+		//printf "Entered TwitterInviterService.sendMessage: attrs=" + attrs
+		printf "Entered TwitterInviterService.sendMessage"
 		OAuthRequest request = new OAuthRequest( Verb.POST, 'http://api.twitter.com/1/direct_messages/new.json' )
 		request.addBodyParameter( 'user_id', attrs.contact )
 		request.addBodyParameter( 'text', ( attrs.message + " " + attrs.link?:'' ).trim() )

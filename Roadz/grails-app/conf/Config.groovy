@@ -120,7 +120,7 @@ grails.plugin.inviter.twitter.secret='MHukMsTmPnJ6bzhChKqVO3iLsWs2uBbFRraYR8WC1w
 grails.plugin.inviter.windowslive.key='0000000040062703'
 grails.plugin.inviter.windowslive.secret='uuQUGpig3kbv14SdlGwPdHYS86eVWlRc'
 //grails.plugin.inviter.debug = true
-grails.plugin.inviter.defaultMessage="... online right now. Join me."
+grails.plugin.inviter.defaultMessage="... join me online. "
 grails.plugin.inviter.defaultDescription="Bywaze is a zero install mobile app for local collaboration"
 
 // Added by the Spring Security Core plugin:

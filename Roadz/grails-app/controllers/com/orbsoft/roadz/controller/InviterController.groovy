@@ -1,19 +1,73 @@
 package com.orbsoft.roadz.controller
 
 import org.scribe.model.Token
-import grails.converters.*
+import grails.converters.JSON
+import com.orbsoft.roadz.domain.User
+import com.orbsoft.roadz.domain.Friendship
+import org.springframework.beans.factory.InitializingBean
 
 class InviterController {
 
 	def springSecurityService
 	def grailsApplication
+	def userService
 
 	def index = { 
 		// get here from link generated below
 		// write params out to session and redirect to login prompt
+		println "inviter.index: session.inviter=" + session.inviter 
 		session.inviter = params.inviter
 		session.invitee = params.invitee
+		session.provider = params.provider
 		redirect url: "/"
+		// afer first login use session to create pending invitation
+	}
+
+	def createPendingInviteFromSession = {
+		// after logging-in for first time check for pending invitations
+		println "inviter.createPendingInviteFromSession session.inviter=" + session.inviter 
+		println "inviter.createPendingInviteFromSession session.invitee=" + session.invitee 
+		println "inviter.createPendingInviteFromSession session.provider=" + session.provider 
+
+		if (session.inviter) {
+			User inviter = User.findByUsername(session.inviter)
+			User invitee = User.findByUsername(springSecurityService.authentication.name)
+			def inviterFriendship = Friendship.findWhere(friendedBy: inviter, friendOf: null, provider: session.provider, address: session.invitee, status: Friendship._INVITE_PENDING)
+			if (inviterFriendship) inviterFriendship.friendOf = invitee
+			render 'inviter.createPendingInviteFromSession: invite saved'
+			return
+		}
+		render 'inviter.createPendingInviteFromSession: no change'
+	}
+
+	def getPendingInvites= {
+		// could do a join, for now use status
+		def username = springSecurityService.authentication.name
+		println "inviter.getPendingInvites: username=" + username
+		User friendOf = User.findByUsername(springSecurityService.authentication.name)
+		def pendingInvites = Friendship.findAllWhere(friendOf: friendOf, status: Friendship._INVITE_PENDING)
+		render pendingInvites.friendedBy as JSON
+		// TODO add sent invites to list (currently just received)
+	}
+
+	def acceptInvites = {
+		// accept 
+		println "inviter.acceptInvites: params.invites=" + params.invites
+		params.invites.split(',').each { username ->
+			println "username=" + username
+			User inviter = User.findByUsername(username)
+			println "inviter=" + inviter
+			User invitee = User.findByUsername(springSecurityService.authentication.name)
+			println "invitee=" + invitee
+			def inviterFriendship = Friendship.findWhere(friendedBy: inviter, friendOf: invitee)
+			inviterFriendship.status = Friendship._INVITE_FRIENDS
+			inviterFriendship.save()
+			new Friendship(friendedBy: invitee, friendOf: inviter, status: Friendship._INVITE_FRIENDS).save()
+			// send private notification to inviter
+			//chatService.privateChat(chatService.getClientId('demo', inviter), "ServerMessage message")
+			userService.sendMsg(username, invitee.username + " has accepted your invitation and is online")
+		}		
+		render 'inviter.acceptInvites: invites accepted'
 	}
 
 	def invite = {
@@ -36,6 +90,13 @@ class InviterController {
 
 		def message = ( grailsApplication.config.grails.plugin.inviter.defaultMessage ?: params.message ) as String
 		def description = ( grailsApplication.config.grails.plugin.inviter.defaultDescription ?: params.description ) as String
+
+		// get user
+		println "name=" + springSecurityService.authentication.name
+		User user = User.findByUsername(springSecurityService.authentication.name)
+		println "user=" + user
+		//User inviter = User.findByUsername('inviter')
+		//println "inviter=" + inviter
 
 		if( grailsApplication.config.grails.plugin.inviter.debug ){
 			render """
@@ -62,11 +123,24 @@ class InviterController {
 						subject: params.subject
 						message: message
 					}
+					Friendship.findOrSaveWhere(friendedBy: user, friendOf: null, provider: params.provider, address: address, status: Friendship._INVITE_PENDING)
 				}
 			} else {
 				params.addresses.split(',').each { address ->
-					def link = createLink(absolute: 'true', params: [inviter: "fffffffff", invitee: address]) as String
-					def response = service.sendMessage( accessToken: accessToken, link: link, contact:address, message: message, subject: params.subject, description: description )
+					def username = user.username
+					println "username=" + username
+					def link = createLink(absolute: 'true', params: [inviter: username, invitee: address, provider: params.provider]) as String
+					println "link=" + link
+					message = '... join me online. '
+					println "message=" + message
+					def response = service.sendMessage( accessToken: accessToken, link: link, contact:address, message: message as String, subject: params.subject, description: description )
+					// check if invitee exists
+					def invitee = null
+					def inviteeFriendship = Friendship.findWhere(provider: params.provider, address: address)
+					if (inviteeFriendship)
+						invitee = inviteeFriendship.friendOf
+					Friendship.findOrSaveWhere(friendedBy: user, friendOf: invitee, provider: params.provider, address: address, status: Friendship._INVITE_PENDING)
+					// TODO send notification to app
 					render response
 					return
 				}
