@@ -92,8 +92,9 @@ class InviterController {
 		def description = ( grailsApplication.config.grails.plugin.inviter.defaultDescription ?: params.description ) as String
 
 		// get user
-		println "name=" + springSecurityService.authentication.name
-		User user = User.findByUsername(springSecurityService.authentication.name)
+		def username = springSecurityService.authentication.name
+		println "name=" + username
+		User user = User.findByUsername(username)
 		println "user=" + user
 		//User inviter = User.findByUsername('inviter')
 		//println "inviter=" + inviter
@@ -127,8 +128,6 @@ class InviterController {
 				}
 			} else {
 				params.addresses.split(',').each { address ->
-					def username = user.username
-					println "username=" + username
 					def link = createLink(absolute: 'true', params: [inviter: username, invitee: address, provider: params.provider]) as String
 					println "link=" + link
 					message = '... join me online. '
@@ -148,7 +147,9 @@ class InviterController {
 
 		}
 
-		render 'Your messages have been sent'
+		userService.sendMsg(username, "Your invites have been sent")
+
+		render 'Your invites have been sent'
 
 	}
 
