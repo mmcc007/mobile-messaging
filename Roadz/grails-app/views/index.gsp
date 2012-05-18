@@ -158,8 +158,6 @@
 
 		<div id="map" dojoType="dojox.mobile.ScrollableView" threshold="10000000" data-dojo-props="selected: true">
 			<h1 dojoType="dojox.mobile.Heading" label="ByWaze" back="Friends" moveTo="friends">
-				<div dojoType="dojox.mobile.ToolBarButton" label="Edit"
-					class="mblColorBlue" style="width: 25px; float: right"></div>
 			</h1>
 			<div id="map_canvas"></div>
 			<div id="boxc" class="box" style="left: 12px; top: 50px; z-index: 0; ">
@@ -190,13 +188,14 @@
 		<div id="friends" data-dojo-type="bywaze.FriendsView">
 			<h1 dojoType="dojox.mobile.Heading" fixed="top"
 				label="Friends" back="Back" moveTo="map" transition="fade">
-				<div id="friendsRefreshButton" dojoType="dojox.mobile.ToolBarButton" label="Refresh" 
-					data-dojo-props="icon: '/Roadz/js/bywaze/resources/images/refresh.png'"
-					class="mblColorBlue friendsRefreshButton" style="width: 25px; float: right;" ></div>
-				<div id="contactsButton" dojoType="dojox.mobile.ToolBarButton" label="Add" moveTo="invite"
-					class="mblColorBlue" style="width: 25px; float: right;" transition="slide"></div>
+				<div id="friendsRefreshButton" dojoType="dojox.mobile.ToolBarButton" 
+					data-dojo-props="icon: 'js/tweetview/resources/images/refresh.png'"
+					class="mblDomButton friendsRefreshButton" style="width: 25px; float: right;" ></div>
+			<div id="contactsButton" data-dojo-type="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" moveTo="invite" style="float:right;" transition="slide"></div>
 			</h1>
+
 			<div data-dojo-type="dojox.mobile.RoundRectList" class="friendsviewList"></div>
+
 		</div>
 
 		<div id="invite" data-dojo-type="dojox.mobile.ScrollableView" data-dojo-props="">
@@ -231,8 +230,9 @@
 			<h1 dojoType="dojox.mobile.Heading" fixed="top" label="Pending Invites">
 				<div id="acceptInviteButton" dojoType="dojox.mobile.ToolBarButton" label="Acpt" 
 					class="mblColorBlue acceptInviteButton" style="width: 30px; float: right;"></div>
-				<div id="pendingInvitesRefreshButton" dojoType="dojox.mobile.ToolBarButton" label="Refresh" 
-					class="mblColorBlue pendingInvitesRefreshButton" style="width: 35px; float: right;" ></div>
+				<div id="pendingInvitesRefreshButton" dojoType="dojox.mobile.ToolBarButton" 
+					data-dojo-props="icon: 'js/tweetview/resources/images/refresh.png'"
+					class="mblDomButton pendingInvitesRefreshButton" style="width: 25px; float: right;" ></div>
 			</h1>
 			<pre id="acceptInvitesFormResultNode"></pre>
 			<form id="acceptInvitesFormNode">
@@ -541,7 +541,7 @@
 	</div>
 
 	<div id="article" dojoType="dojox.mobile.ScrollableView" style="background-color:white;height:100%">
-		<h1 dojoType="dojox.mobile.Heading" fixed="top">Article</h1>
+		<h1 dojoType="dojox.mobile.Heading" fixed="top">Settings</h1>
 		<div class="content">
 			<div id="controller-list" role="navigation">
 				<h2>Available Controllers:</h2>
@@ -571,40 +571,18 @@
 				</g:each>
 			</ul>
 		</div>
-			<h3 class="title">Did you know?</h3>
-			<h4 class="subtitle">Features of dojox.mobile</h4>
-			<h5 class="subsubtitle">No images are used</h5>
-			<ul class="lst">
-			  	<li>UI parts consist of DOM and CSS3.</li>
-				<li>Only application icons are images.</li>
-			</ul>
-
-			<h5 class="subsubtitle">Removed dependencies on the dojo modules as much as possible</h5>
-			<ul class="lst">
-			  	<li>No dependencies even on some of the essential core modules like Templated, Container, Contained, dojo.query, or dojo.parser.</li>
-			</ul>
-
-			<h5 class="subsubtitle">Support for CSS sprite</h5>
-			<ul class="lst">
-				<li>Application icon images can be aggregated into a single file to reduce the number of http requests.</li>
-			</ul>
-
-			<h5 class="subsubtitle">Possible to use the webkitMobile build option (when PC browser support is unnecessary)</h5>
-			<ul class="lst">
-				<li>Drops IE and Firefox-specific code at build time, and thus reduces the dojo core size</li>
-			</ul>
 		</div>
 	</div>
 
 	<ul dojoType="dojox.mobile.TabBar" fixed="bottom" style="border-bottom:none;">
- 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-16.png" icon2="images/tab-icon-16h.png" selected="true" moveTo="map">Friends</li> 
+ 		<li id="friendsToolbarButton" dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-16.png" icon2="images/tab-icon-16h.png" selected="true" moveTo="map">Friends</li> 
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-15.png" icon2="images/tab-icon-15h.png" moveTo="pendingInvites">Invites</li>
 <!--
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-15.png" icon2="images/tab-icon-15h.png" moveTo="checkin">CheckIn</li>
--->
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-10.png" icon2="images/tab-icon-10h.png" moveTo="top25">Top 25</li>
 		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-11.png" icon2="images/tab-icon-11h.png" moveTo="search">Search</li>
-		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-13.png" icon2="images/tab-icon-13h.png" moveTo="article">Updates</li>
+-->
+		<li dojoType="dojox.mobile.TabBarButton" icon1="images/tab-icon-13.png" icon2="images/tab-icon-13h.png" moveTo="article">Settings</li>
 	</ul>
 		<script>
 			var provider;
