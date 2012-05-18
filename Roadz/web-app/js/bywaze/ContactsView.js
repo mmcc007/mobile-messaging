@@ -105,7 +105,8 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 			baseArray.forEach(contactsData[0][1], function(contact) {
 				// Get the user's screen name
 				var name = contact.name;
-				var avatar = contact.photoUrl;
+	//			var avatar = contact.photoUrl;
+				var avatar = contact.photo;
 				var id = contact.address;
 
 				// Create a new list item, inject into list
