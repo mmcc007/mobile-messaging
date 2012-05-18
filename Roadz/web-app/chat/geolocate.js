@@ -85,8 +85,8 @@ function whenTrueDo(cond, func) {
 	if (eval(cond))
 		eval(func);
 	else {
-		console.log(logDateTime() + ": sleeping for 100ms");
-		setTimeout("whenTrueDo('" + cond + "','" + func + "')", 100);
+		console.log(logDateTime() + ": sleeping for 200ms");
+		setTimeout("whenTrueDo('" + cond + "','" + func + "')", 200);
 	}
 }
 
