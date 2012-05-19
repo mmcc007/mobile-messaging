@@ -4,39 +4,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<title>ByWaze</title>
-	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/base.css">
-	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/TabBar.css">
-		<link href="js/bywaze/resources/FriendsView.css" rel="stylesheet" />
-		<script type="text/javascript">
-			function getBase() {
-				var base = location.href.split("/");
-				base.pop();
-				base = base.join("/");
-				return base;
-			}
-			// make base global
-			_base = getBase();
-			
-			var dojoConfig = (function(){
-
-				return {
-					//parseOnLoad: true,
-					async: false,
-					isDebug: true,
-					packages: [{
-						name: "bywaze",
-						location: _base + "/js/bywaze"
-					}]
-				};
-			})();
-			
-		</script>
-	<script type="text/javascript" src="js/bywaze/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','SimpleDialog','TextBox','Button','Slider']"></script>
-    <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js"></script>
-	<script type="text/javascript" src="src.js"></script>
-<script type="text/javascript">
-</script>
-	<link href="demo.css" rel="stylesheet">
+		<sec:ifNotLoggedIn>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/googleapis/0.0.4/googleapis.min.js"></script>
@@ -73,6 +41,41 @@
 	    </g:if>
 	    });
 	</script>
+		</sec:ifNotLoggedIn>
+ 		<sec:ifLoggedIn>
+	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/base.css">
+	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/TabBar.css">
+		<link href="js/bywaze/resources/FriendsView.css" rel="stylesheet" />
+		<script type="text/javascript">
+			function getBase() {
+				var base = location.href.split("/");
+				base.pop();
+				base = base.join("/");
+				return base;
+			}
+			// make base global
+			_base = getBase();
+			
+			var dojoConfig = (function(){
+
+				return {
+					//parseOnLoad: true,
+					async: false,
+					isDebug: true,
+					packages: [{
+						name: "bywaze",
+						location: _base + "/js/bywaze"
+					}]
+				};
+			})();
+			
+		</script>
+	<script type="text/javascript" src="js/bywaze/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','SimpleDialog','TextBox','Button','Slider']"></script>
+   <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js"></script>
+	<script type="text/javascript" src="src.js"></script>
+		</sec:ifLoggedIn>
+		<sec:ifLoggedIn>
+	<link href="demo.css" rel="stylesheet">
 
     <script type="text/javascript" src="scroll/iscroll.js"></script>
     <script src="http://maps.google.com/maps/api/js?v=3.8&key=AIzaSyCPgZBX3_gTNaU9hIyPU_6iKkpqcbLUjEk&sensor=true" type="text/javascript"></script>
@@ -114,6 +117,7 @@
 	<script type="text/javascript" src="chat/genericdrag.js"></script>
 	
 		<script>
+		//document.getElementsByTagName("body").style.property="visibility:hidden";
 		(function(){
 			
 			require(["dijit/registry", "dojox/mobile/parser", "dojox/mobile/TabBar", "dojox/mobile/Button", "bywaze/FriendsView", "bywaze/ContactsView", "bywaze/InvitesView", "bywaze/SystemDialog", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(registry, mobileParser, TabBar, Button, FriendsView, ContactsView, InvitesView, SystemDialog, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
@@ -140,8 +144,9 @@
 
 		})();
 		</script>
+		</sec:ifLoggedIn>
 </head>
-<body style="visibility:hidden;">
+<body style="visibility:display">
 		<sec:ifNotLoggedIn>
 			<div id="navbar"></div>
 	    </sec:ifNotLoggedIn>
@@ -150,7 +155,7 @@
 			room.join.call(dojo, '<sec:username/>');
 		</script>
 
-				<div id="dlg_message" data-dojo-type="bywaze.SystemDialog">
+				<div id="dlg_message" data-dojo-type="bywaze.SystemDialog" data-dojo-props="selected: false">
 					<div class="mblSimpleDialogTitle">Alert</div>
 					<div id="dlg_messagetext" class="mblSimpleDialogText">This is a sample dialog.</div>
 					<button data-dojo-type="dojox.mobile.Button" class="mblSimpleDialogButton" style="width:100px;" onclick="hide('dlg_message')">OK</button>
@@ -207,7 +212,7 @@
 					<g:each in="${[ 'facebook', 'twitter' ]}" var="provider">
 						<li>
 							<riv:invitationLink provider="${provider}"><img
-									src="${resource(dir: 'images', file: provider + '.png')}"/> ${provider}</riv:invitationLink>
+									src="${resource(dir: 'images', file: provider + '.png')}"/>${provider}</riv:invitationLink>
 						</li>
 					</g:each>
 				</ul>
