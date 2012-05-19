@@ -1,11 +1,11 @@
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
-grails.config.locations = [
-    "classpath:${appName}-config.properties",
-    "classpath:${appName}-config.groovy",
-    "file:${userHome}/.grails/${appName}-config.properties",
-    "file:${userHome}/.grails/${appName}-config.groovy" ]
+//grails.config.locations = [
+//    "classpath:${appName}-config.properties",
+//    "classpath:${appName}-config.groovy",
+//    "file:${userHome}/.grails/${appName}-config.properties",
+//    "file:${userHome}/.grails/${appName}-config.groovy" ]
 
 // if (System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
@@ -103,6 +103,12 @@ log4j = {
 
 //grails.plugin.inviter.facebook.key='197755966948551'
 //grails.plugin.inviter.facebook.secret='5dc5ace6405e5882511e6dd177aa5f77'
+
+// facebook on server
+grails.plugin.inviter.facebook.key='361078353916023'
+grails.plugin.inviter.facebook.secret='7935f90b95cd9ce75ced3f27ffc28e63'
+
+// facebook local
 //grails.plugin.inviter.facebook.key='106080722853795'
 //grails.plugin.inviter.facebook.secret='0f35f877ef70901985193824676ff096'
 
@@ -115,8 +121,10 @@ grails.plugin.inviter.linkedin.secret='KBtxC418sdmu5eur'
 
 //grails.plugin.inviter.twitter.key='G8rCU7AHBsZAbeLUAP0i7Q'
 //grails.plugin.inviter.twitter.secret='BKbt1ygWu0q4xsLuJ8bhjYvegojVHz2GXn1Z5leoXN8'
-//grails.plugin.inviter.twitter.key='hEa3ktzqOC47av7haygA'
-//grails.plugin.inviter.twitter.secret='MHukMsTmPnJ6bzhChKqVO3iLsWs2uBbFRraYR8WC1w'
+
+// twitter local
+grails.plugin.inviter.twitter.key='hEa3ktzqOC47av7haygA'
+grails.plugin.inviter.twitter.secret='MHukMsTmPnJ6bzhChKqVO3iLsWs2uBbFRraYR8WC1w'
 
 grails.plugin.inviter.windowslive.key='0000000040062703'
 grails.plugin.inviter.windowslive.secret='uuQUGpig3kbv14SdlGwPdHYS86eVWlRc'
