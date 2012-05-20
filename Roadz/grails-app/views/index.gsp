@@ -116,7 +116,7 @@
 	<link href="chat/genericdrag.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="chat/genericdrag.js"></script>
 	
-		<script>
+		<script type="text/javascript">
 		//document.getElementsByTagName("body").style.property="visibility:hidden";
 		(function(){
 			
@@ -149,8 +149,6 @@
 						location.href = dojo.attr(this,"href");
 					}
 				);
-
-
 			});
 						
 		})();
@@ -158,8 +156,12 @@
 		</script>
 		</sec:ifLoggedIn>
 </head>
-<body style="visibility:display">
+<body style="visibility: hidden;">
 		<sec:ifNotLoggedIn>
+			<script type="text/javascript">
+					// set visibility of body
+				document.body.style.visibility='visible';
+			</script>
 			<div id="navbar"></div>
 	    </sec:ifNotLoggedIn>
 		<sec:ifLoggedIn>
