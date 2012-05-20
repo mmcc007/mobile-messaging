@@ -120,7 +120,7 @@
 		//document.getElementsByTagName("body").style.property="visibility:hidden";
 		(function(){
 			
-			require(["dijit/registry", "dojox/mobile/parser", "dojox/mobile/TabBar", "dojox/mobile/Button", "bywaze/FriendsView", "bywaze/ContactsView", "bywaze/InvitesView", "bywaze/SystemDialog", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(registry, mobileParser, TabBar, Button, FriendsView, ContactsView, InvitesView, SystemDialog, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
+			require(["dijit/registry", "dojox/mobile/parser", "dojo/query", "dojox/mobile/TabBar", "dojox/mobile/Button", "bywaze/FriendsView", "bywaze/ContactsView", "bywaze/InvitesView", "bywaze/SystemDialog", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(registry, mobileParser, query, TabBar, Button, FriendsView, ContactsView, InvitesView, SystemDialog, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
 				// If Android....
 				if(dm.currentTheme == "android") {
 					var imagePath = "../js/tweetview/resources/images/";
@@ -137,12 +137,24 @@
 					registry.byId(dlg).hide();
 				}
 
+				// replace external (provider) links with onclick events
+				query('.attachLinkEvent').onclick( 
+					function (event) {
+						// Stop the default behavior of the browser, which
+						// is to change the URL of the page.
+						event.preventDefault();
+						 
+						// Manually change the location of the page to stay in
+						// "Standalone" mode and change the URL at the same time.
+						location.href = dojo.attr(this,"href");
+					}
+				);
+
+
 			});
 						
-			// Set current user for bywaze directly on the namespace
-			//username = "sec:username/>";
-
 		})();
+
 		</script>
 		</sec:ifLoggedIn>
 </head>

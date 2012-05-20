@@ -12,7 +12,7 @@ class InviterTagLib {
             throwTagError("Tag [invitationLink] is missing required attribute [provider]")
         }
 
-		def linkAttrs = [ controller : 'inviter', action: 'invite', params: [provider: attrs.provider ] ]
+		def linkAttrs = [ controller : 'inviter', action: 'invite', class: "attachLinkEvent", params: [provider: attrs.provider ] ]
 
 		out << link( linkAttrs, body )
 
