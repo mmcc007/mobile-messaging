@@ -1,8 +1,6 @@
-dojo.require("dojox.cometd");
-dojo.require("dojox.cometd.timestamp");
-dojo.require("dojox.cometd.ack");
-dojo.require("dojox.cometd.reload");
-
+require(["dojo", "dojox/cometd", "dojox/cometd/timestamp", "dojox/cometd/ack", "dojox/cometd/reload"],
+function(dojo, cometd)
+{
 var room = {
     _lastUser: null,
     _username: null,
@@ -51,8 +49,8 @@ var room = {
         dojo.query("#leaveButton").onclick(room, "leave");
 
         // Check if there was a saved application state
-        var stateCookie = org.cometd.COOKIE?org.cometd.COOKIE.get('org.cometd.demo.state'):null;
-        var state = stateCookie ? org.cometd.JSON.fromJSON(stateCookie) : null;
+            var stateCookie = dojo.cookie('org.cometd.demo.state');
+            var state = stateCookie ? dojo.fromJson(stateCookie) : null;
         // Restore the state, if present
         if (state)
         {
@@ -62,12 +60,16 @@ var room = {
                 // This will perform the handshake
                 room.join(state.username);
             }, 0);
+        } else {
+            // join the room
+            if (USER_NAME) 
+                room.join(USER_NAME);
         }
+
     },
 
     join: function(name)
     {
-    	
         room._disconnecting = false;
 
         if (name == null || name.length == 0)
@@ -76,15 +78,13 @@ var room = {
             return;
         }
 
+            //cometd.ackEnabled = dojo.byId("ackEnabled").checked;
     	geolocate.startGeolocation();
 
-    	dojox.cometd.ackEnabled = dojo.query("#ackEnabled").attr("checked");
-
-        dojox.cometd.websocketEnabled = true;
         var cometdURL = location.protocol + "//" + location.host + config.contextPath + "/cometd";
-        dojox.cometd.init({
+            cometd.init({
             url: cometdURL,
-            logLevel: "info"
+                logLevel: "info"
         });
 
         room._username = name;
@@ -98,20 +98,20 @@ var room = {
     {
         if (room._chatSubscription)
         {
-            dojox.cometd.unsubscribe(room._chatSubscription);
+                cometd.unsubscribe(room._chatSubscription);
         }
         room._chatSubscription = null;
         if (room._membersSubscription)
         {
-            dojox.cometd.unsubscribe(room._membersSubscription);
+                cometd.unsubscribe(room._membersSubscription);
         }
         room._membersSubscription = null;
     },
 
     _subscribe: function()
     {
-        room._chatSubscription = dojox.cometd.subscribe('/chat/demo', room.receive);
-        room._membersSubscription = dojox.cometd.subscribe('/members/demo', room.members);
+            room._chatSubscription = cometd.subscribe('/chat/demo', room.receive);
+            room._membersSubscription = cometd.subscribe('/members/demo', room.members);
     },
 
     leave: function()
@@ -121,14 +121,14 @@ var room = {
         {
         	removeMarker(room._username);
         	zoomOut();
-            dojox.cometd.publish("/chat/demo", {
+            cometd.publish("/chat/demo", {
                 user: room._username,
                 membership: 'leave',
                 chat: room._username + " has left"
             });
             room._unsubscribe();
         });
-        dojox.cometd.disconnect();
+            cometd.disconnect();
 
         // switch the input form
         dojo.removeClass("join", "hidden");
@@ -151,7 +151,7 @@ var room = {
         var colons = text.indexOf("::");
         if (colons > 0)
         {
-            dojox.cometd.publish("/service/privatechat", {
+                cometd.publish("/service/privatechat", {
                 room: "/chat/demo", // This should be replaced by the room name
                 user: room._username,
                 chat: text.substring(colons + 2),
@@ -160,7 +160,7 @@ var room = {
         }
         else
         {
-            dojox.cometd.publish("/chat/demo", {
+                cometd.publish("/chat/demo", {
                 user: room._username,
                 chat: text
             });
@@ -185,6 +185,11 @@ var room = {
         if (message.data.membership == "leave") {
     		removeMarker(fromUser);
     	}
+
+        // announce your location to new users
+        if (message.data.membership=="join")
+            geoPublish();
+
         var membership = message.data.join || message.data.leave;
         var text = message.data.chat;
 
@@ -254,10 +259,10 @@ var room = {
     _connectionInitialized: function()
     {
         // first time connection for this client, so subscribe and tell everybody.
-        dojox.cometd.batch(function()
+            cometd.batch(function()
         {
             room._subscribe();
-            dojox.cometd.publish('/chat/demo', {
+                cometd.publish('/chat/demo', {
                 user: room._username,
                 membership: 'join',
                 chat: room._username + ' has joined circle'
@@ -275,7 +280,7 @@ var room = {
                 chat: 'Connection to Server Opened'
             }
         });
-        dojox.cometd.publish('/service/members', {
+            cometd.publish('/service/members', {
             user: room._username,
             room: '/chat/demo',
 //    		latitude : myPosition.coords.latitude,
@@ -335,19 +340,19 @@ var room = {
     }
 };
 
-dojox.cometd.addListener("/meta/handshake", room, room._metaHandshake);
-dojox.cometd.addListener("/meta/connect", room, room._metaConnect);
+    cometd.addListener("/meta/handshake", room, room._metaHandshake);
+    cometd.addListener("/meta/connect", room, room._metaConnect);
 dojo.addOnLoad(room, "_init");
 dojo.addOnUnload(function()
 {
     if (room._username)
     {
-        dojox.cometd.reload();
-        org.cometd.COOKIE.set('org.cometd.demo.state', org.cometd.JSON.toJSON({
+            cometd.reload();
+            dojo.cookie('org.cometd.demo.state', dojo.toJson({
             username: room._username
         }), { 'max-age': 5 });
     }
     else
-        dojox.cometd.disconnect();
+            cometd.disconnect();
 });
-
+});
