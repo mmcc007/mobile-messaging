@@ -3,7 +3,12 @@
 <head>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
+<!-- prevent cache -->
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+ 	
 	<title>ByWaze</title>
+   <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 		<sec:ifNotLoggedIn>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
@@ -43,8 +48,9 @@
 	</script>
 		</sec:ifNotLoggedIn>
  		<sec:ifLoggedIn>
-	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/base.css">
-	<link rel="stylesheet" type="text/css" href="dojo-1.7.1/dojox/mobile/themes/iphone/TabBar.css">
+	<link rel="stylesheet" type="text/css" href="bywaze-release/dojo/dojox/mobile/themes/iphone/base.css">
+	<link rel="stylesheet" type="text/css" href="bywaze-release/dojo/dojox/mobile/themes/iphone/TabBar.css">
+
 		<link href="js/bywaze/resources/FriendsView.css" rel="stylesheet" />
 		<script type="text/javascript">
 			function getBase() {
@@ -60,9 +66,11 @@
 
 				return {
 					//parseOnLoad: true,
-					async: false,
+					async: true,
+					deps: ['chat/chat.js'],
 					isDebug: true,
-					packages: [{
+					packages: [
+					{
 						name: "bywaze",
 						location: _base + "/js/bywaze"
 					}]
@@ -71,7 +79,8 @@
 			
 		</script>
 	<script type="text/javascript" src="js/bywaze/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','SimpleDialog','TextBox','Button','Slider']"></script>
-   <script type="text/javascript" src="dojo-1.7.1/dojo/dojo.js"></script>
+   <script type="text/javascript" src="bywaze-release/dojo/dojo/dojo.js"></script>
+   <script src="bywaze-release/dojo/bywaze/bywaze-app.js"></script>
 	<script type="text/javascript" src="src.js"></script>
 		</sec:ifLoggedIn>
 		<sec:ifLoggedIn>
@@ -82,7 +91,6 @@
 	
     <link rel="stylesheet" type="text/css" href="chat/chat.css">
     <script type="text/javascript" src="chat/geolocate.js"></script>
-    <script type="text/javascript" src="chat/chat.js"></script>
 	<script type="text/javascript">
             var myScroll;
             function loaded() {
@@ -123,10 +131,10 @@
 			require(["dijit/registry", "dojox/mobile/parser", "dojo/query", "dojox/mobile/TabBar", "dojox/mobile/Button", "bywaze/FriendsView", "bywaze/ContactsView", "bywaze/InvitesView", "bywaze/SystemDialog", "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojo/io-query", "dojo/_base/connect", "dojo/dom-style", "dojox/mobile", "dojo/domReady!"], function(registry, mobileParser, query, TabBar, Button, FriendsView, ContactsView, InvitesView, SystemDialog, dm, domAttr, baseArray, ioQuery, connect, domStyle) {
 				// If Android....
 				if(dm.currentTheme == "android") {
-					var imagePath = "../js/tweetview/resources/images/";
+					var imagePath = "../js/bywaze/resources/images/";
 					// Update image path on bottom tabbar
-					TweetView.prototype.iconLoading = imagePath + "androidLoading.gif";
-					// Add a new "iconLoading" attribute to the TweetView instances
+					bywaze.prototype.iconLoading = imagePath + "androidLoading.gif";
+					// Add a new "iconLoading" attribute to the bywaze instances
 					//domAttr.set(document.getElementById("tabBar"), "iconBase", imagePath + "iconStripAndroid.png");
 				}
 
@@ -137,9 +145,7 @@
 					registry.byId(dlg).hide();
 				}
 
-				// replace external (provider) links with onclick events
-				query('.attachLinkEvent').onclick( 
-					function (event) {
+				var modifyHref = function (event) {
 						// Stop the default behavior of the browser, which
 						// is to change the URL of the page.
 						event.preventDefault();
@@ -148,10 +154,19 @@
 						// "Standalone" mode and change the URL at the same time.
 						location.href = dojo.attr(this,"href");
 					}
-				);
+
+				// replace external (provider) links with onclick events
+				var elements = document.getElementsByClassName('attachLinkEvent');
+				for (var i=0; i<elements.length;i++) {
+					elements[i].onclick = modifyHref; 
+				}
 			});
 						
 		})();
+
+		// tell us who the logged-in user is and make it global
+		USER_NAME = '<sec:username/>';
+
 
 		</script>
 		</sec:ifLoggedIn>
@@ -165,10 +180,6 @@
 			<div id="navbar"></div>
 	    </sec:ifNotLoggedIn>
 		<sec:ifLoggedIn>
-		<script>
-			room.join.call(dojo, '<sec:username/>');
-		</script>
-
 				<div id="dlg_message" data-dojo-type="bywaze.SystemDialog" data-dojo-props="selected: false">
 					<div class="mblSimpleDialogTitle">Alert</div>
 					<div id="dlg_messagetext" class="mblSimpleDialogText">This is a sample dialog.</div>
@@ -208,7 +219,7 @@
 			<h1 dojoType="dojox.mobile.Heading" fixed="top"
 				label="Friends" back="Back" moveTo="map" transition="fade">
 				<div id="friendsRefreshButton" dojoType="dojox.mobile.ToolBarButton" 
-					data-dojo-props="icon: 'js/tweetview/resources/images/refresh.png'"
+					data-dojo-props="icon: 'js/bywaze/resources/images/refresh.png'"
 					class="mblDomButton friendsRefreshButton" style="width: 25px; float: right;" ></div>
 			<div id="contactsButton" data-dojo-type="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" moveTo="invite" style="float:right;" transition="slide"></div>
 			</h1>
@@ -250,7 +261,7 @@
 				<div id="acceptInviteButton" dojoType="dojox.mobile.ToolBarButton" label="Acpt" 
 					class="mblColorBlue acceptInviteButton" style="width: 30px; float: right;"></div>
 				<div id="pendingInvitesRefreshButton" dojoType="dojox.mobile.ToolBarButton" 
-					data-dojo-props="icon: 'js/tweetview/resources/images/refresh.png'"
+					data-dojo-props="icon: 'js/bywaze/resources/images/refresh.png'"
 					class="mblDomButton pendingInvitesRefreshButton" style="width: 25px; float: right;" ></div>
 			</h1>
 			<pre id="acceptInvitesFormResultNode"></pre>
