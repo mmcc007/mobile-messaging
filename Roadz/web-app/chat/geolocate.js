@@ -204,8 +204,8 @@ function setPosition(position) {
 	// prepare to publish the location
 	//		log('calling geoPublish()');
 	myPosition = position;
-	if (!room._connected) {
-		asyncWhenTrueDo("room._connected", "geoPublish()");
+	if (!dojox.cometd.getClientId()) {
+		asyncWhenTrueDo("dojox.cometd.getClientId()", "geoPublish()");
 		geolocate.stopGeolocation();
 	} else
 		geoPublish();
@@ -243,7 +243,7 @@ function geoPublish() {
 	log('Publishing my position with clientId : ' + clientId);
 	// Publish on a normal channel since the message is for broadcast
 	var myLocation = {};
-	myLocation['user'] = room._username;
+	myLocation['user'] = USER_NAME;
 	myLocation['clientId'] = clientId;
 	myLocation['latitude'] = myPosition.coords.latitude;
 	myLocation['longitude'] = myPosition.coords.longitude;
