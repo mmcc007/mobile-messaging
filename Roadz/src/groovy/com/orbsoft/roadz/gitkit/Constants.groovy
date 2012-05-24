@@ -7,7 +7,7 @@ public final class Constants {
 	  /**
 	   * Default URL for home page.
 	   */
-	  public static final String HOME_PAGE_URL = "";
+	  public static final String HOME_PAGE_URL = "index2.gsp";
 	
 	  /**
 	   * The URL for account page.

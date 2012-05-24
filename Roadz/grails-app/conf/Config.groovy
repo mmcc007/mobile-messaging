@@ -130,7 +130,7 @@ grails.plugin.inviter.windowslive.key='0000000040062703'
 grails.plugin.inviter.windowslive.secret='uuQUGpig3kbv14SdlGwPdHYS86eVWlRc'
 //grails.plugin.inviter.debug = true
 grails.plugin.inviter.defaultMessage="... join me online. "
-grails.plugin.inviter.defaultDescription="Bywaze is a zero install mobile app for local collaboration"
+grails.plugin.inviter.defaultDescription="Do things with your friends nearby with ByWaze"
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.orbsoft.roadz.domain.UserSec'
