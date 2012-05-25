@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/connect", "bywaze/SimpleDialog", "bywaze/_ViewMixin", "dijit/registry"], 
-	function(declare, connect, SimpleDialog, _ViewMixin, registry) {
+define(["dojo/_base/declare", "dojo/dom", "dojo/_base/connect", "bywaze/SimpleDialog", "bywaze/_ViewMixin", "dijit/registry"], 
+	function(declare, dom, connect, SimpleDialog, _ViewMixin, registry) {
 
 	return declare("bywaze.SystemDialog", [SimpleDialog, _ViewMixin], {
 
@@ -8,7 +8,7 @@ define(["dojo/_base/declare", "dojo/_base/connect", "bywaze/SimpleDialog", "bywa
 			// Retain functionality of startup in dojox/mobile/Opener
 			this.inherited(arguments);
 						
-			this.systemMsg = dojo.byId(this.getElements("mblSimpleDialogText", this.domNode)[0].id);
+			this.systemMsg = dom.byId(this.getElements("mblSimpleDialogText", this.domNode)[0].id);
 
 			// subscribe to a channel for showing system messages
 	        connect.subscribe("/bywaze/showSystemMsg", this, this.onShowSystemMsg);

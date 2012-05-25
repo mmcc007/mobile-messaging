@@ -3,53 +3,18 @@
 <head>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-<!-- prevent cache -->
+<!--
+ -->	
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="pragma" content="no-cache">
- 	
+ <!-- prevent cache 
+-->	
 	<title>ByWaze</title>
    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
-		<sec:ifNotLoggedIn>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/googleapis/0.0.4/googleapis.min.js"></script>
-	<script type="text/javascript" src="//ajax.googleapis.com/jsapi"></script>
-	<script type="text/javascript"> 
-		google.load("identitytoolkit", "1", {packages: ["mobile_ac"], language:"en"});
-	</script>
-	<script type="text/javascript">
-	  $(function() {
-	    window.google.identitytoolkit.setConfig({
-	        developerKey: "AIzaSyBxRA1SwApaq3WQUreST9m_kJfVMTO3sPw",
-	        companyName: "Orbsoft",
-	        callbackUrl: "http://${request.serverName}:${request.serverPort}${request.contextPath}/gitkit?rp_fullPageRedirect=true",
-	        realm: "",
-	        userStatusUrl: "/userstatus",
-	        loginUrl: "/login",
-	        signupUrl: "/signup",
-	        homeUrl: "${request.requestURI}",
-	        logoutUrl: "/logout",
-	        idps: ["Gmail", "Yahoo", "AOL"],
-	        tryFederatedFirst: true,
-	        useCachedUserStatus: false,
-	        useContextParam: false
-	    });
-	    $("#navbar").accountChooser();
-	    <g:if test="${session.login_account != null}" >
-		    var userData = {
-		      email: '${session.login_account.email}',
-		      displayName: '${session.login_account.displayName}',
-		      photoUrl: '${session.login_account.photoUrl}',
-		    };
-		    window.google.identitytoolkit.updateSavedAccount(userData);
-		    window.google.identitytoolkit.showSavedAccount('${session.login_account.email}');
-	    </g:if>
-	    });
-	</script>
-		</sec:ifNotLoggedIn>
- 		<sec:ifLoggedIn>
+<!--
 	<link rel="stylesheet" type="text/css" href="bywaze-release/dojo/dojox/mobile/themes/iphone/base.css">
 	<link rel="stylesheet" type="text/css" href="bywaze-release/dojo/dojox/mobile/themes/iphone/TabBar.css">
+-->	
 
 		<link href="js/bywaze/resources/FriendsView.css" rel="stylesheet" />
 		<script type="text/javascript">
@@ -78,16 +43,13 @@
 			})();
 			
 		</script>
-	<script type="text/javascript" src="js/bywaze/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','SimpleDialog','TextBox','Button','Slider']"></script>
+	<script type="text/javascript" src="js/bywaze/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','SimpleDialog','TextBox','Button']"></script>
    <script type="text/javascript" src="bywaze-release/dojo/dojo/dojo.js"></script>
    <script src="bywaze-release/dojo/bywaze/bywaze-app.js"></script>
 	<script type="text/javascript" src="src.js"></script>
-		</sec:ifLoggedIn>
-		<sec:ifLoggedIn>
 	<link href="demo.css" rel="stylesheet">
 
     <script type="text/javascript" src="scroll/iscroll.js"></script>
-    <script src="http://maps.google.com/maps/api/js?v=3.8&key=AIzaSyCPgZBX3_gTNaU9hIyPU_6iKkpqcbLUjEk&sensor=true" type="text/javascript"></script>
 	
     <link rel="stylesheet" type="text/css" href="chat/chat.css">
     <script type="text/javascript" src="chat/geolocate.js"></script>
@@ -117,7 +79,16 @@
 					myOptions);
 
 		}
-		google.maps.event.addDomListener(window, 'load', initialize);
+
+		function loadScript() {
+		  var script = document.createElement("script");
+		  script.type = "text/javascript";
+    	  script.src="http://maps.google.com/maps/api/js?v=3.8&key=AIzaSyCPgZBX3_gTNaU9hIyPU_6iKkpqcbLUjEk&sensor=true&callback=initialize";
+		  document.body.appendChild(script);
+		}
+
+		window.onload = loadScript;
+
 	</script>
 <link type="text/css" media="all" href="scroll/iscroll.css" rel="stylesheet">
 <link href="scroll/genericdrag.css" rel="stylesheet" type="text/css">
@@ -164,22 +135,31 @@
 						
 		})();
 
+		// Check if a new cache is available on page load.
+		window.addEventListener('load', function(e) {
+
+		  window.applicationCache.addEventListener('updateready', function(e) {
+		    if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+		      // Browser downloaded a new app cache.
+		      // Swap it in and reload the page to get the new hotness.
+		      window.applicationCache.swapCache();
+		      if (confirm('A new version of this site is available. Load it?')) {
+		        window.location.reload();
+		      }
+		    } else {
+		      // Manifest didn't changed. Nothing new to server.
+		    }
+		  }, false);
+
+		}, false);
+
 		// tell us who the logged-in user is and make it global
 		USER_NAME = '<sec:username/>';
 
 
 		</script>
-		</sec:ifLoggedIn>
 </head>
 <body style="visibility: hidden;">
-		<sec:ifNotLoggedIn>
-			<script type="text/javascript">
-					// set visibility of body
-				document.body.style.visibility='visible';
-			</script>
-			<div id="navbar"></div>
-	    </sec:ifNotLoggedIn>
-		<sec:ifLoggedIn>
 				<div id="dlg_message" data-dojo-type="bywaze.SystemDialog" data-dojo-props="selected: false">
 					<div class="mblSimpleDialogTitle">Alert</div>
 					<div id="dlg_messagetext" class="mblSimpleDialogText">This is a sample dialog.</div>
@@ -637,6 +617,5 @@
 
 		})();
 		</script>	
-	    </sec:ifLoggedIn>
 </body>
 </html>
