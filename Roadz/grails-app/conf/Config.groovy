@@ -11,6 +11,61 @@
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+// -------------------------------------------------------------------------------- //
+// - START: CONFIGURATION FILE LOADING -------------------------------------------- //
+// -------------------------------------------------------------------------------- //
+// locations to search for config files that get merged into the main config
+// config files can either be Java properties files or ConfigSlurper scripts
+def ENV_NAME = "${appName}.config.location"
+if(!grails.config.locations || !(grails.config.locations instanceof List)) {
+	grails.config.locations = []
+}
+println "--------------------------------------------------------------------------------"
+println "- Loading configuration file                                                   -"
+println "--------------------------------------------------------------------------------"
+// 1: check for environment variable that has been set! This variable must point to the
+// configuration file that must be used. Can be a .groovy or .properties file!
+if(System.getenv(ENV_NAME) && new File(System.getenv(ENV_NAME)).exists()) {
+	println("Including System Environment configuration file: " + System.getenv(ENV_NAME))
+	grails.config.locations << "file:" + System.getenv(ENV_NAME)
+ 
+// 2: check for commandline properties!
+// Use it like (examples):
+//      grails -D[name of app].config.location=/tmp/[name of config file].groovy run-app
+// or
+//      grails -D[name of app].config.location=/tmp/[name of config file].properties run-app
+//
+} else if(System.getProperty(ENV_NAME) && new File(System.getProperty(ENV_NAME)).exists()) {
+	println "Including configuration file specified on command line: " + System.getProperty(ENV_NAME)
+	grails.config.locations << "file:" + System.getProperty(ENV_NAME)
+ 
+// 3: check on local project config file in the project root directory
+} else if (new File("./${appName}-config.groovy").exists()) {
+	println "*** User defined config: file:./${appName}-config.groovy ***"
+	grails.config.locations = ["file:./${appName}-config.groovy"]
+} else if (new File("./${appName}-config.properties").exists()) {
+	println "*** User defined config: file:./${appName}-config.properties ***"
+	grails.config.locations = ["file:./${appName}-config.groovy"]
+ 
+// 4: check on local project config file in ${userHome}/.grails/...
+} else if (new File("${userHome}/.grails/${appName}-config.groovy").exists()) {
+	println "*** User defined config: file:${userHome}/.grails/${appName}-config.groovy ***"
+	grails.config.locations = ["file:${userHome}/.grails/${appName}-config.groovy"]
+} else if (new File("${userHome}/.grails/${appName}-config.properties").exists()) {
+	println "*** User defined config: file:${userHome}/.grails/${appName}-config.properties ***"
+	grails.config.locations = ["file:${userHome}/.grails/${appName}-config.properties"]
+ 
+// 5: we have problem!!
+} else {
+	println "********************************************************************************"
+	println "* No external configuration file defined                                       *"
+	println "********************************************************************************"
+}
+println "(*) grails.config.locations = ${grails.config.locations}"
+println "--------------------------------------------------------------------------------"
+// -------------------------------------------------------------------------------- //
+// - END: CONFIGURATION FILE LOADING ---------------------------------------------- //
+// -------------------------------------------------------------------------------- //
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
