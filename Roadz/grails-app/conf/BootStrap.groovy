@@ -11,6 +11,7 @@ import com.orbsoft.roadz.domain.UserSecRoleSec
 import com.orbsoft.roadz.domain.User
 import com.orbsoft.roadz.domain.Friendship
 import com.orbsoft.roadz.gitkit.Constants
+//import com.orbsoft.roadz.gitkit.SessionManager
 import grails.util.Environment
 
 class BootStrap {
@@ -83,7 +84,8 @@ class BootStrap {
 	private void initEasyRpContext() {
 		RpConfig config = new RpConfig.Builder().sessionUserKey(Constants.SESSION_KEY_LOGIN_USER)
 			.homeUrl(Constants.HOME_PAGE_URL).signupUrl(Constants.SIGNUP_PAGE_URL).build();
-		SessionManager sessionManager = new SessionBasedSessionManager(config);
+		SessionManager sessionBasedSessionManager = new SessionBasedSessionManager(config);
+		SessionManager sessionManager = new com.orbsoft.roadz.gitkit.SessionManager(sessionBasedSessionManager);
 		Context.setConfig(config);
 		Context.setAccountService(accountService);
 		Context.setSessionManager(sessionManager);

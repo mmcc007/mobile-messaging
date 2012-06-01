@@ -11,12 +11,17 @@
    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://cachedcommons.org/cache/jquery-cookie/0.0.0/javascripts/jquery-cookie-min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/googleapis/0.0.4/googleapis.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/jsapi"></script>
 	<script type="text/javascript"> 
 		google.load("identitytoolkit", "1", {packages: ["mobile_ac"], language:"en"});
 	</script>
 	<script type="text/javascript">
+	   if  ($.cookie("grails_remember_me")!=null) {
+    	   window.location = "index2.gsp";
+       }
+
 	  $(function() {
 	    window.google.identitytoolkit.setConfig({
 	        developerKey: "AIzaSyBxRA1SwApaq3WQUreST9m_kJfVMTO3sPw",

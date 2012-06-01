@@ -195,6 +195,10 @@ grails.plugins.springsecurity.authority.className = 'com.orbsoft.roadz.domain.Ro
 //	'preAuthenticatedAuthenticationProvider',
 //	'anonymousAuthenticationProvider',
 //	'rememberMeAuthenticationProvider']
+grails.plugins.springsecurity.rememberMe.alwaysRemember = true
+//grails.plugins.springsecurity.rememberMe.persistent = true
+
+
 // for development of deployments only, remove before final deploy
 grails.gsp.enable.reload=true
 grails.gorm.failOnError=true
