@@ -111,6 +111,18 @@
 
 				// Parse the page!
 				mobileParser.parse();
+				
+				var params = ioQuery.queryToObject(window.location.search.slice(1));
+				if (params.provider) {
+					// turn on contacts view
+					console.warn("turn on contacts view: provider: ", params.provider);
+					domStyle.set("map", "display", "none")
+				} else {
+					// turn on map view
+					console.warn("turn on map view");
+//					domStyle.set("map", "display", "block")
+					domStyle.set("contacts", "display", "none")					
+				}
 
 				hide = function(dlg){
 					registry.byId(dlg).hide();

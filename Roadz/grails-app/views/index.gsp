@@ -18,8 +18,9 @@
 		google.load("identitytoolkit", "1", {packages: ["mobile_ac"], language:"en"});
 	</script>
 	<script type="text/javascript">
+	   // if currently logged-in forward to main page and include url
 	   if  ($.cookie("grails_remember_me")!=null) {
-    	   window.location = "index2.gsp";
+    	   window.location = "index2.gsp" + window.location.search;
        }
 
 	  $(function() {
@@ -39,6 +40,8 @@
 	        useContextParam: false
 	    });
 	    $("#navbar").accountChooser();
+	    // show logged-in user after login
+<!-- 
 	    <g:if test="${session.login_account != null}" >
 		    var userData = {
 		      email: '${session.login_account.email}',
@@ -48,7 +51,8 @@
 		    window.google.identitytoolkit.updateSavedAccount(userData);
 		    window.google.identitytoolkit.showSavedAccount('${session.login_account.email}');
 	    </g:if>
-	    });
+ -->
+ 		});
 
 		// Check if a new cache is available on page load.
 		window.addEventListener('load', function(e) {
