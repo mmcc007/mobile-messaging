@@ -29,4 +29,9 @@ class UserController {
 		else		
 			render ''
 	}
+	
+	def getUsername () {
+		render "{username: '" + springSecurityService.authentication.name + "' }"
+		
+	}
 }

@@ -25,6 +25,7 @@ class UserService {
 		bayeuxSession = bayeux.newLocalSession()
 		bayeuxSession.handshake()
 
+		// TODO: may have to add code to only send to room that member is currently in
         for (String room : rooms) {
 	        chat.put("room", "/chat/" + room);
         	// connect and publish

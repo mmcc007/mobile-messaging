@@ -1,9 +1,17 @@
 .box {
-  background-color: #ffff00;
-  border: 1px solid #000000;
+	    font-size: 70%;
+    border: 1px solid black;
+height: 30%;
+width: 30%;
+  opacity:0.7;
+	background-color: #ffff00;
+/*   border: 1px solid #000000; */
   color: #000000;
-  padding: 0px;
   position: absolute;
+  	padding:0;
+	margin:0;
+/* 	border:1px; */
+  
 }
 
 .bar {
@@ -16,5 +24,10 @@
 
 .content {
 //  padding: 1em;
+	padding:0;
+	margin:0;
+/* 	border:0; */
+    border: 1px solid black;
+
 }
 

@@ -51,7 +51,7 @@ var browser = new Browser();
 // Global object to hold drag information.
 
 var dragObj = new Object();
-dragObj.zIndex = 0;
+dragObj.zIndex = 9999999;
 
 function dragStart(e, id) {
 	  if(e.touches==undefined) {
@@ -110,7 +110,7 @@ function dragStart(e, id) {
 
   // Update element's z-index.
 
-  dragObj.elNode.style.zIndex = ++dragObj.zIndex;
+  dragObj.elNode.style.zIndex = ++dragObj.zIndex + 100;
 
   // Capture mousemove and mouseup events on the page.
 
@@ -125,7 +125,8 @@ function dragStart(e, id) {
   document.addEventListener("mouseup",   dragStop, true);
   document.addEventListener("touchmove", dragGo,   true);
   document.addEventListener("touchend",   dragStop, true);
-//    event.preventDefault();
+//  document.addEventListener("touchstart",   dragStart, true);
+    e.preventDefault();
   }
 }
 
@@ -166,8 +167,8 @@ function dragGo(e) {
     window.event.cancelBubble = true;
     window.event.returnValue = false;
   }
-//  if (browser.isNS)
-//    event.preventDefault();
+  if (browser.isNS)
+    e.preventDefault();
 }
 
 function dragStop(event) {

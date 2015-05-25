@@ -41,6 +41,8 @@ public class ChatService {
 //    }
 
 //    private String privateStr = "privateStr";
+	
+	// data structure: Room->Members->
     private static final ConcurrentMap<String, Map<String, String>> _members = new ConcurrentHashMap<String, Map<String, String>>();
  //   private final Map<String, Map<String, String>> _members = new HashMap<String, Map<String, String>>();
 

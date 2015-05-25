@@ -33,7 +33,7 @@ function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableVi
 
 		// When the widgets have started....
 		startup: function() {
-			console.log("entered startup")
+			console.log("friendsView: entered startup")
 			// Retain functionality of startup in dojox/mobile/ScrollableView
 			this.inherited(arguments);
 			

@@ -1,19 +1,42 @@
-define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspect", "dojo/i18n", "dojo/dom-class", "dojo/dom-attr", "dojox/mobile/ScrollableView", "dojox/mobile/ListItem", "dojox/mobile/TextBox", "dojo/DeferredList", "dojo/_base/xhr", "dojo/io-query", "dojo/dom", "bywaze/_ViewMixin", "dijit/registry"], function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableView, ListItem, TextBox, DeferredList, xhr, ioQuery, dom, _ViewMixin, registry) {
+define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspect", "dojo/i18n", "dojo/dom-class", "dojo/dom-attr", "dojox/mobile/ScrollableView", "dojox/mobile/ListItem", "dojo/text!./ContactsView/templates/ContactsView.html", "dojox/mobile/TextBox", "dojo/DeferredList", "dojo/_base/xhr", "dojo/io-query", "dojo/dom", "bywaze/_ViewMixin", "dijit/registry"], function(declare, baseArray, lang, aspect, i18n, domClass, domAttr, ScrollableView, ListItem, template, TextBox, DeferredList, xhr, ioQuery, dom, _ViewMixin, registry) {
 		var urlParams = ioQuery.queryToObject(window.location.search.slice(1));
 		var provider = urlParams?urlParams.provider:undefined;
 		var code = urlParams?urlParams.code:undefined;
 
 	return declare("bywaze.ContactsView", [ScrollableView, _ViewMixin], {
 
+		widgetsInTemplate: true,
+		templateString: template,
 		// Create a template string for contacts:
-		contactTemplateString: '<img src="${avatar}" alt="${name}" class="friendviewAvatar" />' + 
-		'<div class="friendviewContent"> ' +
-			'<div class="friendviewUser">${name}</div>' + 
-			'<input type="checkbox" name="addresses" id="${id}" value="${id}" />' +
-		'</div>',
+//		contactTemplateString: '<table width="100%"><tr><td>' +
+//	'<img src="${avatar}" alt="${name}" class="friendviewAvatar" />' + 
+//		'<div class="friendviewContent"> ' +
+//			'<div class="friendviewUser">${name}</div>' + 
+//			'<input type="checkbox" name="addresses" id="${id}" value="${id}" /></td>' +
+//			'<td align="right"><button data-dojo-type="dojox.mobile.ToggleButton" name="addresses" id="${id}" value="${id}" checked="false">Invite</button>' +
+//		'</div>' +
+//		'</tr></table>',
+		contactTemplateString: '<table width="99%" style="border-style:solid; border-width:0px;"><tr>' +
+			'<td style="width:1px">' +
+				'<img src="${avatar}" alt="${name}" class="friendviewAvatar" />' + 
+			'</td>' +
+			'<td>' +
+				'<div style="vertical-align:middle;"> ${name} </div>' + 
+			'</td>' +
+			'<td align="right">' +
+				'<div class="friendviewContent"> ' +
+//					'<button data-dojo-type="dojox.mobile.ToggleButton" name="addresses" id="${id}" value="${id}" checked="true" data-dojo-props="">Invite</button>' +
+					'<div data-dojo-type="dojox.mobile.Switch" value="off"></div>ccccc' +
+				'</div>' +
+			'</td>' +
+		'</tr></table>',
+//	contactTemplateString: '${name}',
 
 		// Icon for loading...
 		iconLoading: _base + "/js/bywaze/resources/images/loading.gif",
+
+		// default image..
+		profile_image_url: _base + "/images/default_profile.png",
 
 		// URL to pull tweets from; simple template included
 		//serviceUrl: "http://twitter.com/statuses/user_timeline/${account}.json?since_id=${since_id}",
@@ -111,14 +134,15 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/aspec
 
 				// Create a new list item, inject into list
 				var item = new ListItem({
-					"class": "friendsviewListItem user-" + name,
+					"class": "friendsviewListItem mblVariableHeight user-" + name,
 					"dojoType": "dojox.mobile.ListItem"
-				}).placeAt(this.listNode, "first");
+				}).placeAt(this.listNode, "last");
 
 				// Update the list item's content using our template for contacts
-				item.containerNode.innerHTML += this.substitute(this.contactTemplateString, {
+//				item.containerNode.innerHTML = this.substitute(this.contactTemplateString, {
+				item.containerNode.innerHTML = this.substitute(this.templateString, {
 					name: name,
-					avatar: avatar,
+					avatar: avatar || this.profile_image_url,
 					id: id
 				});
 			}, this);

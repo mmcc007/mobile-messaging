@@ -1,4 +1,5 @@
 dojo
+dojo-1.8.dev
 dojold
 mobiletest
 targetold
@@ -8,3 +9,19 @@ targetold
 target-eclipse
 plugins
 
+
+/Roadz/web-app/dojo-1.7.1
+/Roadz/web-app/tweetview
+/Roadz/web-app/tmp6
+/Roadz/web-app/tmp
+/Roadz/web-app/tmp2
+/Roadz/web-app/tmp3
+/Roadz/web-app/tmp4
+/Roadz/web-app/tmp5
+/Roadz/web-app/tmpx
+/Roadz/web-app/tmporig
+/Roadz/web-app/add2home
+/Roadz/web-app/FancyEditingToolbar
+/Roadz/web-app/sencha
+/*.gz
+/*.war

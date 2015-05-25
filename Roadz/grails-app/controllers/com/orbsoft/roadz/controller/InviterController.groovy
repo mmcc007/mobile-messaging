@@ -6,6 +6,12 @@ import com.orbsoft.roadz.domain.User
 import com.orbsoft.roadz.domain.Friendship
 import org.springframework.beans.factory.InitializingBean
 
+// invite an invitee by connecting to users social graph, download users friends, allowing user to select them,
+// generate an invite url, record it in the database, and send the url to the user's friend's account
+// When the invitee clicks on the link the invitee info is tracked in the session as he logs in. 
+// After login his pending invitation is recorded in the database
+// He can then accept or reject the invitation
+
 class InviterController {
 
 	def springSecurityService
@@ -13,7 +19,9 @@ class InviterController {
 	def userService
 
 	def index = { 
-		// get here from link generated below
+		// get here from link generated below and sent to invitee
+		// can't record invitation in database here because the user has not logged-in
+		// when gitkit standardizes on an email/socialid we can do it here perhaps
 		// write params out to session and redirect to login prompt
 		println "inviter.index: session.inviter=" + session.inviter 
 		session.inviter = params.inviter
@@ -24,6 +32,7 @@ class InviterController {
 	}
 
 	def createPendingInviteFromSession = {
+		// called from inviteView before rendering page
 		// after logging-in for first time check for pending invitations
 		println "inviter.createPendingInviteFromSession session.inviter=" + session.inviter 
 		println "inviter.createPendingInviteFromSession session.invitee=" + session.invitee 
@@ -33,14 +42,21 @@ class InviterController {
 			User inviter = User.findByUsername(session.inviter)
 			User invitee = User.findByUsername(springSecurityService.authentication.name)
 			def inviterFriendship = Friendship.findWhere(friendedBy: inviter, friendOf: null, provider: session.provider, address: session.invitee, status: Friendship._INVITE_PENDING)
-			if (inviterFriendship) inviterFriendship.friendOf = invitee
-			render 'inviter.createPendingInviteFromSession: invite saved'
-			return
-		}
-		render 'inviter.createPendingInviteFromSession: no change'
+			if (inviterFriendship) {
+				inviterFriendship.friendOf = invitee
+				render 'inviter.createPendingInviteFromSession: invite saved'
+			}
+			// remove from session
+			session.inviter = null
+			session.invitee = null
+			session.provider = null
+			
+		} else
+			render 'inviter.createPendingInviteFromSession: no change'
 	}
 
 	def getPendingInvites= {
+		// called from inviterView in order to render page
 		// could do a join, for now use status
 		def username = springSecurityService.authentication.name
 		println "inviter.getPendingInvites: username=" + username
@@ -51,6 +67,7 @@ class InviterController {
 	}
 
 	def acceptInvites = {
+		//called from inviteView when user selects invites to accept and submits
 		// accept 
 		println "inviter.acceptInvites: params.invites=" + params.invites
 		params.invites.split(',').each { username ->
@@ -71,6 +88,7 @@ class InviterController {
 	}
 
 	def invite = {
+		// called from the friendsViewer to get permission from provider and return with an auth code
 		def service = resolveService(params.provider)
 
 		def authInfo = service.getAuthDetails(createLink(controller: '.', absolute: 'true', params: [provider: params.provider]))

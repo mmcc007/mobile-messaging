@@ -28,7 +28,11 @@ class BootStrap {
 		            'glen' : [ fullName: 'Glen Smith', email: "glen@example.org" ],
 		            'peter' : [ fullName: 'Peter Ledbrook', email: "peter@somewhere.net" ],
 		            'sven' : [ fullName: 'Sven Haiges', email: "sven@example.org" ],
-		            'burt' : [fullName : 'Burt Beckwith', email: "burt@somewhere.net" ] ]
+		            'burt' : [fullName : 'Burt Beckwith', email: "burt@somewhere.net" ],
+//		            'mmcc007@gmail.com' : [fullName : 'Maurice McCabe', email: "mmcc007@gmail.com" ],
+//					'maurice_mccabe@yahoo.com' : [fullName : 'M on Y', email: "maurice_mccabe@yahoo.com" ],
+					
+					]
 				
 				def userRole = getOrCreateRole('ROLE_USER')
 				def adminRole = getOrCreateRole('ROLE_ADMIN')
@@ -55,20 +59,22 @@ class BootStrap {
 
 					}
 					def maurice = User.findByUsername("maurice")
-					println "maurice == " + maurice.username
+//					println "maurice == " + maurice.username
 					def glen = User.findByUsername("glen")
 					def chuck = User.findByUsername("chuck_norris")
-					println "glen == " + glen.username
-
-					//maurice.addToFriendship(new Friendship(friend: glen, status: "sss")).save()
-					//maurice.addToFriendship(new Friendship(friend: chuck, status: "sss")).save()
-
+//					println "glen == " + glen.username
+//					def mmcc007 = User.findByUsername("mmcc007@gmail.com")
+//					println "mmcc007 == " + mmcc007.username
+//					def maurice_mccabe = User.findByUsername("maurice_mccabe@yahoo.com")
+//					println "maurice_mccabe == " + maurice_mccabe.username
+					
 					new Friendship(friendedBy: maurice, friendOf: glen, status: "sss").save()
 					new Friendship(friendedBy: maurice, friendOf: chuck, status: "sss").save()
 					new Friendship(friendedBy: chuck, friendOf: maurice, status: "sss").save()
-//					new Friendship(friendedBy: maurice, friendOf: maurice, status: "sss").save()
-					//maurice.addToFriendship(new Friendship(friend: chuck, status: "sss")).save()
+//					new Friendship(friendedBy: mmcc007, friendOf: maurice_mccabe, status: "sss").save()
+//					new Friendship(friendedBy: maurice_mccabe, friendOf: mmcc007, status: "sss").save()
 					println "friendship saved"
+										
 			}
 	    }
 		initEasyRpContext()

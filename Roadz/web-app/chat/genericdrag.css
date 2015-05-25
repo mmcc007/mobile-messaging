@@ -8,14 +8,14 @@
 }
 
 .dragbar {
- 	font-size:80%;
+/*  	font-size:80%; */
   background-color: #606060;
   color: #ffffff;
   cursor: move;
   font-weight: bold;
-/*   padding: 1px 0.5em 1px 0.5em; */
+  padding: 1px 0.5em 1px 0.5em;
 }
 
 .dragcontent {
-  padding: 0.25em;
+/*   padding: 0.25em; */
 }
