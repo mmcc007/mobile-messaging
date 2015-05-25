@@ -1,0 +1,55 @@
+<div>
+	<div id="boxc" class="box" style="left: 12px; top: 50px; z-index: 0;">
+		<div class="bar" data-dojo-attach-point="barNode">My Circle</div>
+		<div class="content">
+			<div id="chatroom" data-dojo-attach-point="chatroomNode">
+				<h3 data-dojo-attach-point="nameNode">Room Name: ${name}</h3>
+				<div id="chat" data-dojo-attach-point="chatNode">
+					<div id="standard">
+						<div class="scroller">
+							<ul id="myList">
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div id="members" data-dojo-attach-point="membersNode"></div>
+				<div id="input" data-dojo-attach-point="inputNode">
+					<div id="join" data-dojo-attach-point="joinNode">
+						<table>
+							<tbody>
+								<tr>
+									<td><input id="ackEnabled" type="checkbox"
+										data-dojo-attach-point="ackEnabledNode" /></td>
+									<td><label for="ackEnabled">Enable ack extension</label></td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>Enter Chat Nickname</td>
+									<td><input id="username" type="text"
+										data-dojo-attach-point="usernameNode" /></td>
+									<td>
+										<button id="joinButton" class="button"
+											data-dojo-attach-point="joinButtonNode">Join</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div id="joined" data-dojo-attach-point="joinedNode">
+						Chat: &nbsp; <input id="phrase" type="text"
+							data-dojo-attach-point="phraseNode" />
+						<button id="sendButton" class="button"
+							data-dojo-attach-point="sendButtonNode">Send</button>
+						<button id="leaveButton" class="button"
+							data-dojo-attach-point="leaveButtonNode">Leave</button>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div style="padding: 0.25em;">Tip: Use
+				username[,username2]::text to send private messages fl</div>
+		</div>
+	</div>
+</div>

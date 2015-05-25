@@ -1,0 +1,21 @@
+<div>
+	<div id="chatroom" data-dojo-attach-point="chatroomNode">
+<!-- 		<h3 data-dojo-attach-point="nameNode">Room Name: ${_roomName}</h3> -->
+		<div id="chat" data-dojo-attach-point="chatNode" style="height:80px">
+			<div id="standard" data-dojo-attach-point="standardNode" >
+				<div class="scroller">
+					<ul id="scrlist" data-dojo-attach-point="scrListNode"></ul>
+				</div>
+			</div>
+		</div>
+		<div id="members" data-dojo-attach-point="membersNode"></div>
+		<div id="input" data-dojo-attach-point="inputNode">
+			<div id="joined" data-dojo-attach-point="joinedNode">
+				<input id="phrase" type="text"
+					data-dojo-attach-point="phraseNode" />
+				<button id="sendButton" class="button"
+					data-dojo-attach-point="sendButtonNode">Send</button>
+			</div>
+		</div>
+	</div>
+</div>

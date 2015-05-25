@@ -1,0 +1,90 @@
+.chatWidget {
+    font-size: 0.8em;
+	border: 1px solid black;
+/*     width: 200px; */
+    padding: 0px;
+    overflow: hidden; /* I hear this helps clear floats inside */
+}
+ 
+.chatWidget h3 {
+    font-size: 1em;
+    font-style: italic;
+    text-align: center;
+    margin: 0px;
+}
+ 
+.chatWidgetAvatar {
+    float: left;
+    margin: 4px 12px 6px 0px;
+    max-width: 75px;
+    max-height: 75px;
+}
+/* body { */
+/*     margin-left: auto; */
+/*     margin-right: auto; */
+/*     width: 50em; */
+/* } */
+
+input {
+    margin: 0;
+}
+
+table td {
+/*     padding: 0.1em; */
+}
+
+#chatroom {
+ //   border: 1px solid black;
+    background-color: #ffffff;
+}
+
+#chat {
+/* 	font-size:80%; */
+    //float: left;
+ //   width: 17em; 
+//    height: 8em;
+//    overflow: auto;
+    word-wrap:break-word;
+    background-color: #f0f0f0;
+/*     padding: 0.1em; */
+  //  border-right: 1px solid black;
+}
+
+#members {
+/* 	font-size:80%; */
+	float: left;
+    clear: right;
+    overflow: auto;
+/*     padding: 0.1em; */
+}
+
+#input {
+    clear: both;
+/*     padding: 0.1em; */
+    border-top: 1px solid black;
+    background-color: #efebe7;
+}
+
+#phrase {
+    width: 80%;
+}
+
+#altServer {
+/*     width: 10em; */
+}
+
+#username {
+/*     width: 10em; */
+}
+
+.hidden {
+  display: none;
+}
+
+span.from {
+    font-weight: bold;
+}
+
+span.membership {
+    font-style: italic;
+}
