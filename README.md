@@ -23,3 +23,12 @@ Faster response, greater scalability and privacy
 Turn on to track location of friends in circles (by convent)
 1. User grouping using circles feature  
 Maintain different circles of friends
+
+
+A partial demo of a more complete implementation (not all features are working in demo). However, it does give you an idea of what it is capable of. Features, that have been implemented in the full version, but not working in the demo include, invites, circle of friends, changing identity, etc...
+
+You can check it out (if online) at http://bywaze.com:8080/Roadz-0.1.9/login
+
+Demo usernames are, glen, burt, sven, chuck_norris, peter
+
+Password is 'password'
